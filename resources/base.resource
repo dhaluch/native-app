@@ -23,6 +23,8 @@ Start session
         ...	                    adbExecTimeout=200000
 ...                                 uiautomator2ServerInstallTimeout=180000
 ...                                 uiautomator2ServerLaunchTimeout=180000  
+...                                 noReset=true
+...                                 appium:skipServerInstallation=false
         Wait Until Page Contains    WEBDRIVER
 Finish session
         Close Application

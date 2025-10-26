@@ -151,6 +151,29 @@ jobs:
           done
           [ $ok -ge 3 ] || { echo "❌ Package Manager não estabilizou."; adb shell service list | tail -n +1 || true; exit 1; }
 
+      # -------------------------
+      # NOVO: Pré-instala o APK via ADB com tentativas (evita timeout do Appium)
+      # -------------------------
+      - name: 📦 Pre-install AUT (apk) with retries
+        run: |
+          set -e
+          APK_PATH="app/wdio.native.app.apk"  # ajuste o caminho se necessário
+          test -f "$APK_PATH" || { echo "❌ APK não encontrado em $APK_PATH"; exit 1; }
+
+          echo "⏳ Instalando APK via adb (até 5 tentativas)..."
+          tries=0
+          until adb install -r -g "$APK_PATH"; do
+            tries=$((tries+1))
+            echo "✖ Falha ao instalar (tentativa $tries)."
+            if [ $tries -ge 5 ]; then
+              echo "❌ Não foi possível instalar o APK após $tries tentativas."
+              exit 1
+            fi
+            echo "⏳ Aguardando 10s e tentando novamente..."
+            sleep 10
+          done
+          echo "✅ APK instalado com sucesso."
+
       - name: 📦 Install Appium (CLI + driver)
         run: |
           npm install -g appium
