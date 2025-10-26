@@ -35,17 +35,24 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Configure PATH for Android Emulator
+        run: |
+          export PATH=$PATH:$ANDROID_HOME/emulator
+          echo "PATH updated: $PATH"
+
       - name: Create Android emulator
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_AVD_HOME=$HOME/.android/avd
+          export PATH=$PATH:$ANDROID_HOME/emulator
           echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
           echo "no" | avdmanager create avd -n test -k 'system-images;android-30;google_apis;x86_64' --device 'pixel' --force
-          emulator -list-avds
+          $ANDROID_HOME/emulator/emulator -list-avds
           ls $ANDROID_AVD_HOME
 
       - name: Start Android emulator
         run: |
+          export PATH=$PATH:$ANDROID_HOME/emulator
           nohup $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
           adb wait-for-device
           adb shell input keyevent 82
