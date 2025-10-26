@@ -63,10 +63,15 @@ jobs:
           echo "📂 Conteúdo de $ANDROID_AVD_HOME:"
           ls -la $ANDROID_AVD_HOME || echo "⚠️ Diretório AVD não encontrado!"
 
-      - name: 🚀 Start Android emulator
+      - name: 🚀 Start Android emulator (software mode)
         run: |
           export PATH=$PATH:$ANDROID_HOME/emulator
-          nohup $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
+          nohup $ANDROID_HOME/emulator/emulator -avd test \
+            -accel off \
+            -gpu swiftshader_indirect \
+            -no-snapshot \
+            -no-window \
+            -no-audio &
           adb wait-for-device
           adb shell input keyevent 82
 
