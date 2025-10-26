@@ -19,6 +19,10 @@ Start session
         ...	                    appium:skipDeviceInitialization=true
         ...	                    appPackage=com.wdiodemoapp
         ...	                    appActivity=.MainActivity
+        ...	                    newCommandTimeout=240
+        ...	                    adbExecTimeout=200000
+...                                 uiautomator2ServerInstallTimeout=180000
+...                                 uiautomator2ServerLaunchTimeout=180000  
         Wait Until Page Contains    WEBDRIVER
 Finish session
         Close Application
