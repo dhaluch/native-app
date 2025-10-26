@@ -1,3 +1,6 @@
+      - name: Install Appium UIAutomator2 Driver
+        run: |
+          appium driver install uiautomator2
 name: Run Robot Framework Tests
 
 on:
