@@ -41,7 +41,7 @@ jobs:
         run: |
           robot --outputdir reports tests/
       - name: Upload Robot Framework report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: robot-report
           path: reports/
