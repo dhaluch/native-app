@@ -33,7 +33,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install robotframework
           pip install robotframework-appiumlibrary
-          # Se seus testes usam Browser/Playwright, mantenha as 2 linhas abaixo:
           pip install robotframework-browser
           rfbrowser init
 
@@ -59,9 +58,7 @@ jobs:
           export PATH=$PATH:$ANDROID_HOME/emulator
 
           echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
-
-          echo "no" | avdmanager create avd \
-            -n test \
+          echo "no" | avdmanager create avd -n test \
             -k 'system-images;android-30;google_apis;x86_64' \
             --device 'pixel' --force
 
@@ -104,31 +101,22 @@ jobs:
           timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
           echo "✅ Package Manager pronto."
 
-      - name: 🔓 Keep screen awake & dismiss keyguard (no-fail, sem input)
+      - name: 🔓 Keep screen awake & dismiss keyguard (no-fail)
         run: |
           adb shell settings put global stay_on_while_plugged_in 3 || true
           adb shell wm dismiss-keyguard || true
           adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
 
-      # 🔴 NOVO: garante user 0 ativo e serviço "settings" pronto (resolve "Can't find service: settings")
       - name: ✅ Ensure Android user & settings service ready
         run: |
           set -e
-          # garante que o user 0 está rodando
           adb shell am start-user 0 || true
-
-          # espera até o serviço "settings" responder via cmd
           SETTINGS_TIMEOUT=180
-          echo "⏳ Aguardando serviço 'settings' ficar disponível..."
-          if ! timeout ${SETTINGS_TIMEOUT}s bash -c 'until adb shell cmd settings list global >/dev/null 2>&1; do sleep 3; done'; then
-            echo "❌ Serviço 'settings' não respondeu dentro do timeout."
-            # dump rápido para diagnóstico
-            adb shell service list | tail -n +1 || true
-            exit 1
-          fi
+          echo "⏳ Aguardando serviço 'settings'..."
+          timeout ${SETTINGS_TIMEOUT}s bash -c 'until adb shell cmd settings list global >/dev/null 2>&1; do sleep 3; done'
           echo "✅ Serviço 'settings' disponível."
 
-      - name: 📦 Install Appium (CLI + driver)
+      - name: 📦 Install Appium
         run: |
           npm install -g appium
           appium -v
@@ -178,3 +166,23 @@ jobs:
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: 📢 Show report URL (console + summary)
+        run: |
+          REPORT_URL=${{ steps.deployment.outputs.page_url }}
+          CURRENT_DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          BRANCH=${{ github.ref_name }}
+
+          echo "✅ Relatório publicado com sucesso!"
+          echo "📅 Data: $CURRENT_DATE"
+          echo "🌿 Branch: $BRANCH"
+          echo "🌐 URL: $REPORT_URL"
+
+          {
+            echo "## 📊 Relatório de Testes Robot Framework"
+            echo ""
+            echo "**📅 Data:** $CURRENT_DATE  "
+            echo "**🌿 Branch:** $BRANCH  "
+            echo ""
+            echo "[👉 Acessar Relatório]($REPORT_URL)"
+          } >> $GITHUB_STEP_SUMMARY
