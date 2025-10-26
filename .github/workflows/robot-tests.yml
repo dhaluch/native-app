@@ -14,84 +14,97 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Python dependencies
+      - name: 📦 Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install robotframework
 
-      - name: Install Node.js
+      - name: 🟢 Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Set up Android SDK
+      - name: 🤖 Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Configure PATH for Android Emulator
+      - name: 🛠️ Configure PATH and folders
         run: |
           export PATH=$PATH:$ANDROID_HOME/emulator
-          echo "PATH updated: $PATH"
+          echo "PATH atualizado: $PATH"
+          mkdir -p $HOME/.android/avd
+          echo "✅ Diretório AVD criado: $HOME/.android/avd"
 
-      - name: Create Android emulator
+      - name: 📲 Create Android emulator
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_AVD_HOME=$HOME/.android/avd
           export PATH=$PATH:$ANDROID_HOME/emulator
-          echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
-          echo "no" | avdmanager create avd -n test -k 'system-images;android-30;google_apis;x86_64' --device 'pixel' --force
-          $ANDROID_HOME/emulator/emulator -list-avds
-          ls $ANDROID_AVD_HOME
 
-      - name: Start Android emulator
+          echo "📦 Instalando system image Android..."
+          echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
+
+          echo "🧱 Criando AVD..."
+          echo "no" | avdmanager create avd \
+            -n test \
+            -k 'system-images;android-30;google_apis;x86_64' \
+            --device 'pixel' --force || true
+
+          echo "📋 AVDs disponíveis:"
+          $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
+
+          echo "📂 Conteúdo de $ANDROID_AVD_HOME:"
+          ls -la $ANDROID_AVD_HOME || echo "⚠️ Diretório AVD não encontrado!"
+
+      - name: 🚀 Start Android emulator
         run: |
           export PATH=$PATH:$ANDROID_HOME/emulator
           nohup $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
           adb wait-for-device
           adb shell input keyevent 82
 
-      - name: Wait for emulator to boot
+      - name: ⏳ Wait for emulator to boot
         run: |
           boot_completed=false
           until $boot_completed; do
             boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
             if [ "$boot_completed" = "1" ]; then
-              echo "✅ Emulator booted"
+              echo "✅ Emulator booted successfully!"
               break
             fi
             echo "⏳ Waiting for emulator to boot..."
             sleep 5
           done
 
-      - name: Install Appium
+      - name: 📦 Install Appium
         run: |
           npm install -g appium
           appium -v
 
-      - name: Install Appium UIAutomator2 Driver
+      - name: 🧰 Install Appium UIAutomator2 Driver
         run: |
           appium driver install uiautomator2@4.0.1
 
-      - name: Start Appium server
+      - name: 🏃 Start Appium server
         run: |
           nohup appium &
 
-      - name: Install Robot Framework Appium Library
+      - name: 🤖 Install Robot Framework Appium Library
         run: |
           pip install robotframework-appiumlibrary
 
-      - name: Run Robot Framework tests with report
+      - name: 🧪 Run Robot Framework tests with report
         run: |
           robot --outputdir reports tests/
 
-      - name: Upload Robot Framework report
+      - name: 📤 Upload Robot Framework report
         uses: actions/upload-artifact@v4
         with:
           name: robot-report
