@@ -33,7 +33,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install robotframework
           pip install robotframework-appiumlibrary
-          # remova as 2 linhas abaixo se não usar Browser/Playwright
+          # Se seus testes NÃO usam Browser/Playwright, remova as 2 linhas abaixo:
           pip install robotframework-browser
           rfbrowser init
 
@@ -52,14 +52,13 @@ jobs:
           touch $HOME/.android/emu-update-last-check.ini
           mkdir -p $HOME/.android/avd
 
-      - name: 📲 Create Android emulator (API 29 - mais estável em CI)
+      - name: 📲 Create Android emulator (API 29 - estável em CI)
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_AVD_HOME=$HOME/.android/avd
           export PATH=$PATH:$ANDROID_HOME/emulator
 
           echo "y" | sdkmanager --install 'system-images;android-29;google_apis;x86_64'
-
           echo "no" | avdmanager create avd \
             -n test \
             -k 'system-images;android-29;google_apis;x86_64' \
@@ -100,17 +99,16 @@ jobs:
           echo "⏳ Checando boot animation (tolerante)..."
           timeout 180s bash -c 'until [ "$(adb shell getprop init.svc.bootanim 2>/dev/null | tr -d "\r")" = "stopped" ]; do sleep 2; done' || echo "⚠️ bootanim indisponível — seguindo."
 
-          echo "⏳ Esperando Package Manager..."
+          echo "⏳ Esperando Package Manager (primeiro sinal)..."
           timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
-          echo "✅ Package Manager pronto."
+          echo "✅ Package Manager respondeu uma vez."
 
-      - name: 🔓 Keep screen awake & dismiss keyguard (no-fail)
+      - name: 🔓 Keep screen awake & go Home (no-fail)
         run: |
           adb shell settings put global stay_on_while_plugged_in 3 || true
           adb shell wm dismiss-keyguard || true
           adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
 
-      # ⚙️ Provisiona o device quando o serviço 'settings' já responde
       - name: ✅ Ensure Android user & settings service ready + provision
         run: |
           set -e
@@ -125,12 +123,33 @@ jobs:
           fi
           echo "✅ Serviço 'settings' disponível."
 
-          # Marca o device como provisionado (ajuda Providers/PM)
+          # Marca device como provisionado (ajuda alguns providers/PM)
           adb shell cmd settings put global device_provisioned 1 || true
           adb shell cmd settings put secure user_setup_complete 1 || true
-
-          # pequena folga pra estabilizar serviços
           sleep 5
+
+      - name: ✅ Final device readiness (service:package stable)
+        run: |
+          set -e
+          adb shell am start-user 0 || true
+          adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
+
+          echo "⏳ Aguardando service manager registrar 'package'..."
+          timeout 300s bash -c 'until adb shell service check package 2>/dev/null | grep -q "found"; do echo "… esperando service package"; sleep 3; done'
+          echo "✅ service: package disponível."
+
+          echo "⏳ Verificando 'pm list packages' 3x seguidas (estabilização)..."
+          ok=0
+          for i in $(seq 1 30); do
+            if adb shell pm list packages >/dev/null 2>&1; then
+              ok=$((ok+1)); echo "✔ PM ok ($ok/3)"
+            else
+              ok=0; echo "✖ PM falhou — reset contador"
+            fi
+            [ $ok -ge 3 ] && break
+            sleep 2
+          done
+          [ $ok -ge 3 ] || { echo "❌ Package Manager não estabilizou."; adb shell service list | tail -n +1 || true; exit 1; }
 
       - name: 📦 Install Appium (CLI + driver)
         run: |
