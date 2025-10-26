@@ -52,17 +52,18 @@ jobs:
           touch $HOME/.android/emu-update-last-check.ini
           mkdir -p $HOME/.android/avd
 
-      - name: 📲 Create Android emulator (API 29 - estável em CI)
+      - name: 📲 Create Android emulator (API 29 - default x86_64)
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_AVD_HOME=$HOME/.android/avd
           export PATH=$PATH:$ANDROID_HOME/emulator
 
-          echo "y" | sdkmanager --install 'system-images;android-29;google_apis;x86_64'
+          echo "y" | sdkmanager --install 'system-images;android-29;default;x86_64'
+
           echo "no" | avdmanager create avd \
-            -n test \
-            -k 'system-images;android-29;google_apis;x86_64' \
-            --device 'pixel' --force
+          -n test \
+          -k 'system-images;android-29;default;x86_64' \
+          --device 'pixel' --force
 
           $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
           ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
