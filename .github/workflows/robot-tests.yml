@@ -35,12 +35,17 @@ jobs:
       - name: 🤖 Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: 🛠️ Configure PATH and folders
+      - name: 🛠️ Configure PATH and Android folders
         run: |
+          # PATH para o binário do emulator
           export PATH=$PATH:$ANDROID_HOME/emulator
-          echo "PATH atualizado: $PATH"
+          echo "PATH: $PATH"
+
+          # Pastas necessárias e .ini para evitar warnings no log
+          mkdir -p $HOME/.android
+          touch $HOME/.android/emu-update-last-check.ini
           mkdir -p $HOME/.android/avd
-          echo "✅ Diretório AVD criado: $HOME/.android/avd"
+          echo "✅ Pastas criadas em $HOME/.android"
 
       - name: 📲 Create Android emulator
         run: |
@@ -48,20 +53,20 @@ jobs:
           export ANDROID_AVD_HOME=$HOME/.android/avd
           export PATH=$PATH:$ANDROID_HOME/emulator
 
-          echo "📦 Instalando system image Android..."
+          echo "📦 Instalando system image Android 30 x86_64 Google APIs..."
           echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
 
-          echo "🧱 Criando AVD..."
+          echo "🧱 Criando AVD 'test'..."
           echo "no" | avdmanager create avd \
             -n test \
             -k 'system-images;android-30;google_apis;x86_64' \
-            --device 'pixel' --force || true
+            --device 'pixel' --force
 
           echo "📋 AVDs disponíveis:"
           $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
 
           echo "📂 Conteúdo de $ANDROID_AVD_HOME:"
-          ls -la $ANDROID_AVD_HOME || echo "⚠️ Diretório AVD não encontrado!"
+          ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
 
       - name: 🚀 Start Android emulator (software mode)
         run: |
@@ -72,21 +77,32 @@ jobs:
             -no-snapshot \
             -no-window \
             -no-audio &
+          # aguarda ADB iniciar e detectar o dispositivo
           adb wait-for-device
+          adb devices
           adb shell input keyevent 82
 
-      - name: ⏳ Wait for emulator to boot
+      - name: ⏳ Wait for emulator to boot (with timeout)
         run: |
           boot_completed=false
-          until $boot_completed; do
+          max_wait=240   # até 4 minutos
+          waited=0
+          until $boot_completed || [ $waited -ge $max_wait ]; do
             boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
             if [ "$boot_completed" = "1" ]; then
               echo "✅ Emulator booted successfully!"
               break
             fi
-            echo "⏳ Waiting for emulator to boot..."
+            echo "⏳ Waiting for emulator to boot... ($waited/$max_wait s)"
             sleep 5
+            waited=$((waited+5))
           done
+          if [ "$boot_completed" != "1" ]; then
+            echo "❌ Emulator failed to boot after $max_wait seconds."
+            echo "🩺 Dumping emulator/emulator logs for troubleshooting..."
+            adb logcat -d | tail -n 200 || true
+            exit 1
+          fi
 
       - name: 📦 Install Appium
         run: |
