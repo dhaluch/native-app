@@ -25,6 +25,6 @@ Start session
 ...                                 uiautomator2ServerLaunchTimeout=180000  
 ...                                 noReset=true
 ...                                 appium:skipServerInstallation=false
-        Wait Until Page Contains    WEBDRIVER        10s
+        Wait Until Page Contains    WEBDRIVER        50s
 Finish session
         Close Application
