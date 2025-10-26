@@ -37,15 +37,11 @@ jobs:
 
       - name: 🛠️ Configure PATH and Android folders
         run: |
-          # PATH para o binário do emulator
           export PATH=$PATH:$ANDROID_HOME/emulator
           echo "PATH: $PATH"
-
-          # Pastas necessárias e .ini para evitar warnings no log
           mkdir -p $HOME/.android
           touch $HOME/.android/emu-update-last-check.ini
           mkdir -p $HOME/.android/avd
-          echo "✅ Pastas criadas em $HOME/.android"
 
       - name: 📲 Create Android emulator
         run: |
@@ -53,19 +49,14 @@ jobs:
           export ANDROID_AVD_HOME=$HOME/.android/avd
           export PATH=$PATH:$ANDROID_HOME/emulator
 
-          echo "📦 Instalando system image Android 30 x86_64 Google APIs..."
           echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
 
-          echo "🧱 Criando AVD 'test'..."
           echo "no" | avdmanager create avd \
             -n test \
             -k 'system-images;android-30;google_apis;x86_64' \
             --device 'pixel' --force
 
-          echo "📋 AVDs disponíveis:"
           $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
-
-          echo "📂 Conteúdo de $ANDROID_AVD_HOME:"
           ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
 
       - name: 🚀 Start Android emulator (software mode)
@@ -74,68 +65,44 @@ jobs:
           nohup $ANDROID_HOME/emulator/emulator -avd test \
             -accel off \
             -gpu swiftshader_indirect \
+            -no-boot-anim \
             -no-snapshot \
+            -no-snapshot-save \
+            -camera-back none \
+            -camera-front none \
             -no-window \
             -no-audio &
-          # aguarda ADB iniciar e detectar o dispositivo
           adb wait-for-device
           adb devices
 
-      - name: ⏳ Wait for full boot (props & bootanim, with timeout)
+      - name: ⏳ Wait for full boot (multi-signal, with timeouts)
         run: |
           set -e
-          timeout_secs=300
-          start_ts=$(date +%s)
+          BOOT_TIMEOUT=360   # seg máx para sinais de boot
+          PM_TIMEOUT=180     # seg máx para Package Manager
 
-          wait_prop () {
-            local prop="$1"
-            local expected="$2"
-            while true; do
-              val=$(adb shell getprop "$prop" 2>/dev/null | tr -d '\r')
-              now=$(date +%s)
-              elapsed=$((now - start_ts))
-              if [ "$val" = "$expected" ]; then
-                echo "✅ $prop == $expected"
-                return 0
-              fi
-              if [ $elapsed -ge $timeout_secs ]; then
-                echo "❌ Timeout esperando $prop==$expected (último: '$val')"
-                return 1
-              fi
-              echo "⏳ Aguardando $prop==$expected (atual: '$val')... ($elapsed/${timeout_secs}s)"
-              sleep 5
-            done
-          }
+          echo "⏳ Aguardando sinais de boot (sys.boot_completed OU dev.bootcomplete)..."
 
-          # 1) sys.boot_completed = 1
-          wait_prop "sys.boot_completed" "1"
+          # 1) sys.boot_completed == 1
+          if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
+            echo "⚠️ sys.boot_completed não ficou 1 dentro do timeout; tentando dev.bootcomplete..."
+            # 2) fallback: dev.bootcomplete == 1
+            timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'
+          fi
+          echo "✅ Sinal de boot recebido."
 
-          # 2) init.svc.bootanim = stopped
-          wait_prop "init.svc.bootanim" "stopped"
+          # 3) bootanim parado (ignora se a prop não existir ou se estourar timeout)
+          echo "⏳ Checando boot animation..."
+          timeout 120s bash -c 'until [ "$(adb shell getprop init.svc.bootanim 2>/dev/null | tr -d "\r")" = "stopped" ]; do sleep 2; done' || echo "⚠️ bootanim não disponível/encerrado — seguindo mesmo assim."
 
-          # 3) PM/AM prontos (cmd package responsivo)
-          while true; do
-            if adb shell cmd package list packages >/dev/null 2>&1; then
-              echo "✅ Package manager pronto"
-              break
-            fi
-            now=$(date +%s)
-            elapsed=$((now - start_ts))
-            if [ $elapsed -ge $timeout_secs ]; then
-              echo "❌ Timeout esperando Package Manager"
-              exit 1
-            fi
-            echo "⏳ Aguardando Package Manager... ($elapsed/${timeout_secs}s)"
-            sleep 3
-          done
-
-          echo "✅ Android fully booted."
+          # 4) Package Manager responsivo
+          echo "⏳ Esperando Package Manager..."
+          timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
+          echo "✅ Package Manager pronto."
 
       - name: 🔓 Keep screen awake & dismiss keyguard (no-fail)
         run: |
-          # Mantém a tela ligada enquanto 'plugado' (emulador)
           adb shell settings put global stay_on_while_plugged_in 3 || true
-          # Desbloqueios/ações que não falham o job se o serviço 'input' não estiver pronto
           adb shell wm dismiss-keyguard || true
           adb shell input keyevent KEYCODE_WAKEUP || true
           adb shell input keyevent 82 || true
