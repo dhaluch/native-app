@@ -185,15 +185,16 @@ jobs:
       - name: 🧭 Set meta (date, branch, artifact name)
         id: set_meta
         run: |
-          DATE=$(date +'%Y-%m-%d')
-          DATETIME=$(date +'%Y-%m-%d %H:%M:%S')
-          BRANCH='${{ github.ref_name }}'
-          ARTIFACT_NAME="robot-logs-${BRANCH}-${DATE}"
-          echo "date=${DATE}" >> $GITHUB_OUTPUT
-          echo "datetime=${DATETIME}" >> $GITHUB_OUTPUT
-          echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
-          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
-          echo "Artifact: ${ARTIFACT_NAME}"
+            DATE=$(date +'%Y-%m-%d')
+            DATETIME=$(date +'%Y-%m-%d %H:%M:%S')
+            BRANCH='${{ github.ref_name }}'
+            SAFE_BRANCH=$(echo "$BRANCH" | sed 's#[/\\:*?"<>|]#-#g')
+            ARTIFACT_NAME="robot-logs-${SAFE_BRANCH}-${DATE}"
+            echo "date=${DATE}" >> $GITHUB_OUTPUT
+            echo "datetime=${DATETIME}" >> $GITHUB_OUTPUT
+            echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+            echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+            echo "Artifact: ${ARTIFACT_NAME}"
 
       - name: 🧪 Run Robot Framework tests
         run: |
