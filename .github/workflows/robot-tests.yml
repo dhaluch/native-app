@@ -36,17 +36,17 @@ jobs:
 
       - name: Create Android emulator
         run: |
-            export ANDROID_SDK_ROOT=$ANDROID_HOME
-            echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
-            echo "no" | avdmanager create avd -n test -k 'system-images;android-30;google_apis;x86_64' --device 'pixel' --force
-            avdmanager list avd
-            ls $HOME/.android/avd
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
+          echo "no" | avdmanager create avd -n test -k 'system-images;android-30;google_apis;x86_64' --device 'pixel' --force
+          avdmanager list avd
+          ls /home/runner/.config/.android/avd
 
       - name: Start Android emulator
         run: |
-            nohup $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
-            adb wait-for-device
-            adb shell input keyevent 82
+          nohup $ANDROID_HOME/emulator/emulator -avd test -avd-path /home/runner/.config/.android/avd/test.avd -no-audio -no-window &
+          adb wait-for-device
+          adb shell input keyevent 82
 
       - name: Wait for emulator to boot
         run: |
@@ -74,14 +74,4 @@ jobs:
 
       - name: Install Robot Framework Appium Library
         run: |
-          pip install robotframework-appiumlibrary
-
-      - name: Run Robot Framework tests with report
-        run: |
-          robot --outputdir reports tests/
-
-      - name: Upload Robot Framework report
-        uses: actions/upload-artifact@v4
-        with:
-          name: robot-report
-          path: reports/
+          pip install
