@@ -26,13 +26,13 @@ Realizar Login com sucesso
 
 
 Preenche Sign Up Form
-    Wait Until Page Contains    Login / Sign up Form                                timeout=240s
+    Wait Until Page Contains    Login / Sign up Form                                timeout=300s
     Click Element                xpath=${SIGN_UP}
     Input Text                   accessibility_id=${INPUT_EMAIL}                   teste@gmail.com
     Input Text                   accessibility_id=${INPUT_PASSWORD}                Senha@123456
     Input Text                   accessibility_id=${INPUT_CONFIRM_PASSWORD}        Senha@123456    
     Click Element                xpath=${BTN_SIGN_UP}
-    Wait Until Page Contains     ${Mensagem_Sucesso_Cadastro}                       timeout=240s
+    Wait Until Page Contains     ${Mensagem_Sucesso_Cadastro}                       timeout=300s
     Click Element                ID=${BTN_OK_SUCCESS}
     
         

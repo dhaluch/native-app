@@ -11,5 +11,5 @@ ${TEXTO_TELA_LOGIN}        Login / Sign up Form
 *** Keywords ***
 Click Login
     Click Element                    ${LOGIN}   
-    Wait Until Page Contains         ${TEXTO_TELA_LOGIN}    timeout=240s
+    Wait Until Page Contains         ${TEXTO_TELA_LOGIN}    timeout=300s
     

@@ -170,6 +170,10 @@ jobs:
             sleep 10
           done
           echo "✅ APK instalado com sucesso."
+          echo "⏳ Pré-lançando app via ADB para acelerar startup (tentativa)..."
+          adb shell am start -n com.wdiodemoapp/.MainActivity || true
+          echo "⏳ Aguardando 20s após pré-lançamento do app"
+          sleep 20
 
       - name: 📦 Install Appium (CLI + driver)
         run: |
@@ -180,7 +184,8 @@ jobs:
       - name: 🏃 Start Appium server
         run: |
           nohup appium > appium.log 2>&1 &
-          sleep 5
+          echo "⏳ Aguardando 15s para Appium inicializar"
+          sleep 15
 
       - name: 🧭 Set meta (date, branch, artifact name)
         id: set_meta
