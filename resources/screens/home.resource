@@ -10,6 +10,6 @@ ${TEXTO_TELA_LOGIN}        Login / Sign up Form
 
 *** Keywords ***
 Click Login
-    Click Element                    ${LOGIN}
-    Wait Until Page Contains         ${TEXTO_TELA_LOGIN}
+    Click Element                    ${LOGIN}   
+    Wait Until Page Contains         ${TEXTO_TELA_LOGIN}    10s    
     
