@@ -80,29 +80,65 @@ jobs:
           # aguarda ADB iniciar e detectar o dispositivo
           adb wait-for-device
           adb devices
-          adb shell input keyevent 82
 
-      - name: ⏳ Wait for emulator to boot (with timeout)
+      - name: ⏳ Wait for full boot (props & bootanim, with timeout)
         run: |
-          boot_completed=false
-          max_wait=240   # até 4 minutos
-          waited=0
-          until $boot_completed || [ $waited -ge $max_wait ]; do
-            boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-            if [ "$boot_completed" = "1" ]; then
-              echo "✅ Emulator booted successfully!"
+          set -e
+          timeout_secs=300
+          start_ts=$(date +%s)
+
+          wait_prop () {
+            local prop="$1"
+            local expected="$2"
+            while true; do
+              val=$(adb shell getprop "$prop" 2>/dev/null | tr -d '\r')
+              now=$(date +%s)
+              elapsed=$((now - start_ts))
+              if [ "$val" = "$expected" ]; then
+                echo "✅ $prop == $expected"
+                return 0
+              fi
+              if [ $elapsed -ge $timeout_secs ]; then
+                echo "❌ Timeout esperando $prop==$expected (último: '$val')"
+                return 1
+              fi
+              echo "⏳ Aguardando $prop==$expected (atual: '$val')... ($elapsed/${timeout_secs}s)"
+              sleep 5
+            done
+          }
+
+          # 1) sys.boot_completed = 1
+          wait_prop "sys.boot_completed" "1"
+
+          # 2) init.svc.bootanim = stopped
+          wait_prop "init.svc.bootanim" "stopped"
+
+          # 3) PM/AM prontos (cmd package responsivo)
+          while true; do
+            if adb shell cmd package list packages >/dev/null 2>&1; then
+              echo "✅ Package manager pronto"
               break
             fi
-            echo "⏳ Waiting for emulator to boot... ($waited/$max_wait s)"
-            sleep 5
-            waited=$((waited+5))
+            now=$(date +%s)
+            elapsed=$((now - start_ts))
+            if [ $elapsed -ge $timeout_secs ]; then
+              echo "❌ Timeout esperando Package Manager"
+              exit 1
+            fi
+            echo "⏳ Aguardando Package Manager... ($elapsed/${timeout_secs}s)"
+            sleep 3
           done
-          if [ "$boot_completed" != "1" ]; then
-            echo "❌ Emulator failed to boot after $max_wait seconds."
-            echo "🩺 Dumping emulator/emulator logs for troubleshooting..."
-            adb logcat -d | tail -n 200 || true
-            exit 1
-          fi
+
+          echo "✅ Android fully booted."
+
+      - name: 🔓 Keep screen awake & dismiss keyguard (no-fail)
+        run: |
+          # Mantém a tela ligada enquanto 'plugado' (emulador)
+          adb shell settings put global stay_on_while_plugged_in 3 || true
+          # Desbloqueios/ações que não falham o job se o serviço 'input' não estiver pronto
+          adb shell wm dismiss-keyguard || true
+          adb shell input keyevent KEYCODE_WAKEUP || true
+          adb shell input keyevent 82 || true
 
       - name: 📦 Install Appium
         run: |
