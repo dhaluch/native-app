@@ -33,6 +33,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install robotframework
           pip install robotframework-appiumlibrary
+          # remova as 2 linhas abaixo se não usar Browser/Playwright
           pip install robotframework-browser
           rfbrowser init
 
@@ -51,15 +52,17 @@ jobs:
           touch $HOME/.android/emu-update-last-check.ini
           mkdir -p $HOME/.android/avd
 
-      - name: 📲 Create Android emulator
+      - name: 📲 Create Android emulator (API 29 - mais estável em CI)
         run: |
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_AVD_HOME=$HOME/.android/avd
           export PATH=$PATH:$ANDROID_HOME/emulator
 
-          echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
-          echo "no" | avdmanager create avd -n test \
-            -k 'system-images;android-30;google_apis;x86_64' \
+          echo "y" | sdkmanager --install 'system-images;android-29;google_apis;x86_64'
+
+          echo "no" | avdmanager create avd \
+            -n test \
+            -k 'system-images;android-29;google_apis;x86_64' \
             --device 'pixel' --force
 
           $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
@@ -84,8 +87,8 @@ jobs:
       - name: ⏳ Wait for full boot (multi-signal, with timeouts)
         run: |
           set -e
-          BOOT_TIMEOUT=360
-          PM_TIMEOUT=180
+          BOOT_TIMEOUT=420
+          PM_TIMEOUT=240
 
           echo "⏳ Esperando sys.boot_completed ou dev.bootcomplete..."
           if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
@@ -95,7 +98,7 @@ jobs:
           echo "✅ Sinal de boot recebido."
 
           echo "⏳ Checando boot animation (tolerante)..."
-          timeout 120s bash -c 'until [ "$(adb shell getprop init.svc.bootanim 2>/dev/null | tr -d "\r")" = "stopped" ]; do sleep 2; done' || echo "⚠️ bootanim indisponível — seguindo."
+          timeout 180s bash -c 'until [ "$(adb shell getprop init.svc.bootanim 2>/dev/null | tr -d "\r")" = "stopped" ]; do sleep 2; done' || echo "⚠️ bootanim indisponível — seguindo."
 
           echo "⏳ Esperando Package Manager..."
           timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
@@ -107,16 +110,29 @@ jobs:
           adb shell wm dismiss-keyguard || true
           adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
 
-      - name: ✅ Ensure Android user & settings service ready
+      # ⚙️ Provisiona o device quando o serviço 'settings' já responde
+      - name: ✅ Ensure Android user & settings service ready + provision
         run: |
           set -e
           adb shell am start-user 0 || true
-          SETTINGS_TIMEOUT=180
+
+          SETTINGS_TIMEOUT=240
           echo "⏳ Aguardando serviço 'settings'..."
-          timeout ${SETTINGS_TIMEOUT}s bash -c 'until adb shell cmd settings list global >/dev/null 2>&1; do sleep 3; done'
+          if ! timeout ${SETTINGS_TIMEOUT}s bash -c 'until adb shell cmd settings list global >/dev/null 2>&1; do sleep 3; done'; then
+            echo "❌ Serviço 'settings' não respondeu dentro do timeout."
+            adb shell service list | tail -n +1 || true
+            exit 1
+          fi
           echo "✅ Serviço 'settings' disponível."
 
-      - name: 📦 Install Appium
+          # Marca o device como provisionado (ajuda Providers/PM)
+          adb shell cmd settings put global device_provisioned 1 || true
+          adb shell cmd settings put secure user_setup_complete 1 || true
+
+          # pequena folga pra estabilizar serviços
+          sleep 5
+
+      - name: 📦 Install Appium (CLI + driver)
         run: |
           npm install -g appium
           appium -v

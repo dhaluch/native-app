@@ -16,6 +16,9 @@ Start session
         ...	                    autoGrantPermissions=true
         ...	                    appium:disableHiddenApiPolicy=false
         ...	                    appium:ignoreHiddenApiPolicyError=true
+        ...	                    appium:skipDeviceInitialization=true
+        ...	                    appPackage=com.wdiodemoapp
+        ...	                    appActivity=.MainActivity
         Wait Until Page Contains    WEBDRIVER
 Finish session
         Close Application
