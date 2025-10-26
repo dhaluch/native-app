@@ -36,8 +36,11 @@ jobs:
 
       - name: Create Android emulator
         run: |
-          echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
-          echo "no" | avdmanager create avd -n test -k 'system-images;android-30;google_apis;x86_64' --device 'pixel'
+            export ANDROID_SDK_ROOT=$ANDROID_HOME
+            export HOME=$(pwd)
+            echo "y" | sdkmanager --install 'system-images;android-30;google_apis;x86_64'
+            echo "no" | avdmanager create avd -n test -k 'system-images;android-30;google_apis;x86_64' --device 'pixel' --force
+            avdmanager list avd
 
       - name: Start Android emulator
         run: |
