@@ -3,7 +3,7 @@ Documentation    ações referentes a tela HOME(inicial)
 
 
 Library    AppiumLibrary
-Library    Browser
+
 
 
 *** Variables ***
