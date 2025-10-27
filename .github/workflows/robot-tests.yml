@@ -1,50 +1,243 @@
-name: Run Robot Framework Tests
+name: Android Robot Tests WEBDRIVBER I/O
 
 on:
   push:
-    branches:
-      - main
-      - feature/*
+    branches: [feature/*]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    outputs:
+      artifact_name: ${{ steps.set_meta.outputs.artifact_name }}
+      date: ${{ steps.set_meta.outputs.date }}
+      datetime: ${{ steps.set_meta.outputs.datetime }}
+      branch: ${{ steps.set_meta.outputs.branch }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - name: Install dependencies
+
+      - name: 📦 Install dependencies (Python)
         run: |
           python -m pip install --upgrade pip
           pip install robotframework
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+          pip install robotframework-appiumlibrary
+          # Se seus testes NÃO usam Browser/Playwright, remova as 2 linhas abaixo:
+          pip install robotframework-browser
+          rfbrowser init
+
+      - name: 🟢 Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Install Appium
+
+      - name: 🤖 Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 🛠️ Configure PATH and Android folders
+        run: |
+          export PATH=$PATH:$ANDROID_HOME/emulator
+          mkdir -p $HOME/.android
+          touch $HOME/.android/emu-update-last-check.ini
+          mkdir -p $HOME/.android/avd
+
+      - name: 📲 Create Android emulator (API 29 - default x86_64)
+        run: |
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_AVD_HOME=$HOME/.android/avd
+          export PATH=$PATH:$ANDROID_HOME/emulator
+
+          echo "y" | sdkmanager --install 'system-images;android-29;default;x86_64'
+
+          echo "no" | avdmanager create avd \
+            -n test \
+            -k 'system-images;android-29;default;x86_64' \
+            --device 'pixel' --force
+
+          $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
+          ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
+
+      - name: 🚀 Start Android emulator (software mode)
+        run: |
+          export PATH=$PATH:$ANDROID_HOME/emulator
+          nohup $ANDROID_HOME/emulator/emulator -avd test \
+            -accel off \
+            -gpu swiftshader_indirect \
+            -no-boot-anim \
+            -no-snapshot \
+            -no-snapshot-save \
+            -camera-back none \
+            -camera-front none \
+            -no-window \
+            -no-audio &
+          adb wait-for-device
+          adb devices
+
+      - name: ⏳ Wait for full boot (multi-signal, with timeouts)
+        run: |
+          set -e
+          BOOT_TIMEOUT=420
+          PM_TIMEOUT=240
+
+          echo "⏳ Esperando sys.boot_completed ou dev.bootcomplete..."
+          if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
+            echo "⚠️ sys.boot_completed não sinalizou; usando dev.bootcomplete..."
+            timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'
+          fi
+          echo "✅ Sinal de boot recebido."
+
+          echo "⏳ Checando boot animation (tolerante)..."
+          timeout 180s bash -c 'until [ "$(adb shell getprop init.svc.bootanim 2>/dev/null | tr -d "\r")" = "stopped" ]; do sleep 2; done' || echo "⚠️ bootanim indisponível — seguindo."
+
+          echo "⏳ Esperando Package Manager (primeiro sinal)..."
+          timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
+          echo "✅ Package Manager respondeu uma vez."
+
+      - name: 🔓 Keep screen awake & go Home (no-fail)
+        run: |
+          adb shell settings put global stay_on_while_plugged_in 3 || true
+          adb shell wm dismiss-keyguard || true
+          adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
+
+      - name: ✅ Ensure Android user & settings service ready + provision
+        run: |
+          set -e
+          adb shell am start-user 0 || true
+
+          SETTINGS_TIMEOUT=240
+          echo "⏳ Aguardando serviço 'settings'..."
+          if ! timeout ${SETTINGS_TIMEOUT}s bash -c 'until adb shell cmd settings list global >/dev/null 2>&1; do sleep 3; done'; then
+            echo "❌ Serviço 'settings' não respondeu dentro do timeout."
+            adb shell service list | tail -n +1 || true
+            exit 1
+          fi
+          echo "✅ Serviço 'settings' disponível."
+
+          adb shell cmd settings put global device_provisioned 1 || true
+          adb shell cmd settings put secure user_setup_complete 1 || true
+          sleep 5
+
+      - name: ✅ Final device readiness (service:package stable)
+        run: |
+          set -e
+          adb shell am start-user 0 || true
+          adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
+
+          echo "⏳ Aguardando service manager registrar 'package'..."
+          timeout 300s bash -c 'until adb shell service check package 2>/dev/null | grep -q "found"; do echo "… esperando service package"; sleep 3; done'
+          echo "✅ service: package disponível."
+
+          echo "⏳ Verificando 'pm list packages' 3x seguidas (estabilização)..."
+          ok=0
+          for i in $(seq 1 30); do
+            if adb shell pm list packages >/dev/null 2>&1; then
+              ok=$((ok+1)); echo "✔ PM ok ($ok/3)"
+            else
+              ok=0; echo "✖ PM falhou — reset contador"
+            fi
+            [ $ok -ge 3 ] && break
+            sleep 2
+          done
+          [ $ok -ge 3 ] || { echo "❌ Package Manager não estabilizou."; adb shell service list | tail -n +1 || true; exit 1; }
+
+      - name: 📦 Pre-install AUT (apk) with retries
+        run: |
+          set -e
+          APK_PATH="app/wdio.native.app.apk"  # ajuste o caminho se necessário
+          test -f "$APK_PATH" || { echo "❌ APK não encontrado em $APK_PATH"; exit 1; }
+
+          echo "⏳ Instalando APK via adb (até 5 tentativas)..."
+          tries=0
+          until adb install -r -g "$APK_PATH"; do
+            tries=$((tries+1))
+            echo "✖ Falha ao instalar (tentativa $tries)."
+            if [ $tries -ge 5 ]; then
+              echo "❌ Não foi possível instalar o APK após $tries tentativas."
+              exit 1
+            fi
+            echo "⏳ Aguardando 10s e tentando novamente..."
+            sleep 10
+          done
+          echo "✅ APK instalado com sucesso."
+          echo "⏳ Pré-lançando app via ADB para acelerar startup (tentativa)..."
+          adb shell am start -n com.wdiodemoapp/.MainActivity || true
+          echo "⏳ Aguardando 20s após pré-lançamento do app"
+          sleep 20
+
+      - name: 📦 Install Appium (CLI + driver)
         run: |
           npm install -g appium
           appium -v
-        - name: Install Appium UIAutomator2 Driver
-          run: |
-            appium driver install uiautomator2@4.0.1
-      - name: Start Appium server
+          appium driver install uiautomator2@4.0.1
+
+      - name: 🏃 Start Appium server
         run: |
-          nohup appium &
-      - name: Install Robot Framework Appium Library
+          nohup appium > appium.log 2>&1 &
+          echo "⏳ Aguardando 15s para Appium inicializar"
+          sleep 15
+
+      - name: 🧭 Set meta (date, branch, artifact name)
+        id: set_meta
         run: |
-          pip install robotframework-appiumlibrary
-      - name: Run Robot Framework tests with report
+            DATE=$(date +'%Y-%m-%d')
+            DATETIME=$(date +'%Y-%m-%d %H:%M:%S')
+            BRANCH='${{ github.ref_name }}'
+            SAFE_BRANCH=$(echo "$BRANCH" | sed 's#[/\\:*?"<>|]#-#g')
+            ARTIFACT_NAME="robot-logs-${SAFE_BRANCH}-${DATE}"
+            echo "date=${DATE}" >> $GITHUB_OUTPUT
+            echo "datetime=${DATETIME}" >> $GITHUB_OUTPUT
+            echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+            echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+            echo "Artifact: ${ARTIFACT_NAME}"
+
+      - name: 🧪 Run Robot Framework tests
         run: |
-          robot --outputdir reports tests/
-      - name: Upload Robot Framework report
+          mkdir -p logs
+          robot --outputdir logs tests/
+
+      - name: 🧷 Ensure logs folder (even on failure)
+        if: always()
+        env:
+          BRANCH: ${{ steps.set_meta.outputs.branch }}
+          DATE: ${{ steps.set_meta.outputs.date }}
+        run: |
+          mkdir -p logs
+          [ -f logs/report.html ] || cat > logs/report.html <<HTML
+          <!doctype html><meta charset="utf-8"><title>Robot Report — ${BRANCH} — ${DATE}</title>
+          <h1>Robot Report — ${BRANCH} — ${DATE}</h1>
+          <p>Nenhum relatório foi gerado. Verifique os logs do job de testes.</p>
+          HTML
+          [ -f logs/log.html ] || cat > logs/log.html <<HTML
+          <!doctype html><meta charset="utf-8"><title>Robot Log — ${BRANCH} — ${DATE}</title>
+          <h1>Robot Log — ${BRANCH} — ${DATE}</h1>
+          <p>Nenhum log disponível. Verifique a execução do job de testes.</p>
+          HTML
+          [ -f logs/index.html ] || cat > logs/index.html <<HTML
+          <!doctype html><meta charset="utf-8">
+          <title>Robot Logs — ${BRANCH} — ${DATE}</title>
+          <h1>Robot Logs — ${BRANCH} — ${DATE}</h1>
+          <p>Redirecionando para <a href="report.html">report.html</a>…</p>
+          <meta http-equiv="refresh" content="0; url=report.html">
+          HTML
+
+      - name: 📤 Upload Robot Framework logs (artifact)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: robot-report
-          path: reports/
+          name: ${{ steps.set_meta.outputs.artifact_name }}
+          path: logs/
+
+  
