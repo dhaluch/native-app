@@ -1,4 +1,4 @@
-name: Android Robot Tests
+name: Android Robot Tests WEBDRIVBER I/O
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
 
 jobs:
@@ -238,59 +237,4 @@ jobs:
           name: ${{ steps.set_meta.outputs.artifact_name }}
           path: logs/
 
-  deploy-pages:
-    if: always()
-    needs: test
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: ⬇️ Download logs artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.test.outputs.artifact_name }}
-          path: logs
-        continue-on-error: true
-
-      - name: 🧷 Ensure logs exist (fallback in deploy job)
-        env:
-          BRANCH: ${{ needs.test.outputs.branch }}
-          DATE: ${{ needs.test.outputs.date }}
-        run: |
-          mkdir -p logs
-          [ -f logs/index.html ] || cat > logs/index.html <<HTML
-          <!doctype html><meta charset="utf-8">
-          <title>Robot Logs — ${BRANCH} — ${DATE}</title>
-          <h1>Robot Logs — ${BRANCH} — ${DATE}</h1>
-          <p>Nenhum artifact foi baixado. Verifique a execução do job de testes.</p>
-          HTML
-
-      - name: ⬆️ Upload Pages artifact (logs/)
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: logs
-
-      - name: 🚀 Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-      - name: 📢 Show logs URL (console + summary)
-        env:
-          LOGS_URL: ${{ steps.deployment.outputs.page_url }}
-          DATE: ${{ needs.test.outputs.datetime }}
-          BRANCH: ${{ needs.test.outputs.branch }}
-        run: |
-          echo "✅ Logs publicados com sucesso!"
-          echo "📅 Data: ${DATE}"
-          echo "🌿 Branch: ${BRANCH}"
-          echo "🌐 URL: ${LOGS_URL}"
-          {
-            echo "## 📊 Robot Framework — Logs/Publicação"
-            echo ""
-            echo "**📅 Data:** ${DATE}  "
-            echo "**🌿 Branch:** ${BRANCH}  "
-            echo ""
-            echo "[👉 Acessar Logs](${LOGS_URL})"
-          } >> $GITHUB_STEP_SUMMARY
+  

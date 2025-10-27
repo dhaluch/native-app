@@ -14,9 +14,11 @@ Deve realizar o cadastro com sucesso
     Wait Until Page Contains    WEBDRIVER    300s
     Click Login
     Preenche Sign Up Form
+    Click Login acima do formulario
     
 Deve realizar o login com sucesso
     [Documentation]    Verifica se o usuário consegue realizar o login com sucesso na aplicação
-    Wait Until Page Contains    WEBDRIVER    300s
+    Limpa os Campos de Login 
     Click Login
     Realizar Login com sucesso
+    
