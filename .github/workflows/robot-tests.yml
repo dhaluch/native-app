@@ -61,11 +61,31 @@ jobs:
           # Create AVD directory
           mkdir -p "$AVD_DIR"
           
-          # Create config.ini for the AVD using echo
+          # Find the correct system image path
+          echo "Locating system image directory..."
+          SYSTEM_IMAGE_DIR=""
+          for possible_path in \
+            "$ANDROID_SDK_ROOT/system-images/android-29/google_apis/x86_64" \
+            "$ANDROID_HOME/system-images/android-29/google_apis/x86_64" \
+            "/usr/local/lib/android/sdk/system-images/android-29/google_apis/x86_64"; do
+            if [ -d "$possible_path" ]; then
+              SYSTEM_IMAGE_DIR="$possible_path"
+              echo "✅ Found system image at: $SYSTEM_IMAGE_DIR"
+              break
+            fi
+          done
+          
+          if [ -z "$SYSTEM_IMAGE_DIR" ]; then
+            echo "❌ System image directory not found. Searching..."
+            find "$ANDROID_SDK_ROOT" -name "x86_64" -type d 2>/dev/null | grep android-29 || true
+            exit 1
+          fi
+
+          # Create config.ini for the AVD using echo with correct system image path
           echo "hw.cpu.arch=x86_64" > "$AVD_DIR/config.ini"
           echo "hw.cpu.ncore=2" >> "$AVD_DIR/config.ini"
           echo "hw.ramSize=2048" >> "$AVD_DIR/config.ini"
-          echo "image.sysdir.1=system-images/android-29/google_apis/x86_64/" >> "$AVD_DIR/config.ini"
+          echo "image.sysdir.1=${SYSTEM_IMAGE_DIR}/" >> "$AVD_DIR/config.ini"
           echo "tag.display=Google APIs" >> "$AVD_DIR/config.ini"
           echo "tag.id=google_apis" >> "$AVD_DIR/config.ini"
           echo "AvdId=${AVD_NAME}" >> "$AVD_DIR/config.ini"
@@ -98,6 +118,23 @@ jobs:
             ls -la "$HOME/.android/avd/" || true
             exit 1
           fi
+          
+          # Verify AVD configuration
+          echo "📋 AVD Configuration:"
+          cat "$HOME/.android/avd/github_ci_avd.ini" || true
+          echo "📋 AVD config.ini:"
+          cat "$HOME/.android/avd/github_ci_avd.avd/config.ini" | head -10 || true
+          
+          # Check system image path from config
+          SYSIMG_PATH=$(grep "image.sysdir.1" "$HOME/.android/avd/github_ci_avd.avd/config.ini" | cut -d'=' -f2)
+          echo "System image path from config: $SYSIMG_PATH"
+          if [ ! -d "$SYSIMG_PATH" ]; then
+            echo "❌ System image directory does not exist: $SYSIMG_PATH"
+            echo "Available system images:"
+            find "$ANDROID_SDK_ROOT" -name "*system-images*" -type d 2>/dev/null || true
+            exit 1
+          fi
+          echo "✅ System image directory verified: $SYSIMG_PATH"
           
           EMU_BIN="$ANDROID_SDK_ROOT/emulator/emulator"
           if [ ! -x "$EMU_BIN" ]; then
