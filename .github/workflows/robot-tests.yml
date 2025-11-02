@@ -240,4 +240,178 @@ jobs:
           name: ${{ steps.set_meta.outputs.artifact_name }}
           path: logs/
 
+  publish-gh-pages:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/feature/'))
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAGES_PAT }}
+
+      - name: 📥 Download test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.test.outputs.artifact_name }}
+          path: ./robot-reports
+
+      - name: 📁 Prepare gh-pages structure
+        env:
+          BRANCH: ${{ needs.test.outputs.branch }}
+          DATE: ${{ needs.test.outputs.date }}
+          DATETIME: ${{ needs.test.outputs.datetime }}
+        run: |
+          # Criar estrutura de diretórios para gh-pages
+          mkdir -p gh-pages
+          
+          # Se existe gh-pages branch, fazer checkout
+          if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
+            git fetch origin gh-pages
+            git checkout gh-pages
+            git pull origin gh-pages
+          else
+            # Criar nova branch gh-pages órfã
+            git checkout --orphan gh-pages
+            git rm -rf .
+            echo "<!DOCTYPE html><html><head><title>Robot Framework Reports</title></head><body><h1>Robot Framework Test Reports</h1><p>Reports will be available here.</p></body></html>" > index.html
+            git add index.html
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Initial gh-pages setup"
+            git push origin gh-pages
+            git checkout main || git checkout master
+            git checkout gh-pages
+          fi
+          
+          # Criar diretório para esta execução
+          SAFE_BRANCH=$(echo "$BRANCH" | sed 's#[/\\:*?"<>|]#-#g')
+          REPORT_DIR="${SAFE_BRANCH}/${DATE}"
+          mkdir -p "${REPORT_DIR}"
+          
+          # Copiar relatórios para o diretório apropriado
+          cp -r ./robot-reports/* "${REPORT_DIR}/"
+          
+          # Criar/atualizar index.html na raiz
+          cat > index.html << HTML
+          <!DOCTYPE html>
+          <html lang="pt-BR">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Robot Framework Test Reports</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  .header { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }
+                  .report-item { background: white; border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+                  .branch-name { color: #0066cc; font-weight: bold; }
+                  .date { color: #666; font-size: 0.9em; }
+                  .links a { margin-right: 15px; text-decoration: none; color: #0066cc; }
+                  .links a:hover { text-decoration: underline; }
+              </style>
+          </head>
+          <body>
+              <div class="header">
+                  <h1>🤖 Robot Framework Test Reports</h1>
+                  <p>Relatórios de testes automatizados gerados pelo GitHub Actions</p>
+              </div>
+              
+              <div class="report-item">
+                  <h3>📊 Execução Mais Recente</h3>
+                  <div class="branch-name">Branch: ${BRANCH}</div>
+                  <div class="date">Data: ${DATETIME}</div>
+                  <div class="links">
+                      <a href="${REPORT_DIR}/report.html" target="_blank">📋 Report</a>
+                      <a href="${REPORT_DIR}/log.html" target="_blank">📄 Log</a>
+                  </div>
+              </div>
+              
+              <h3>📂 Todos os Relatórios</h3>
+          HTML
+          
+          # Adicionar links para todos os relatórios existentes
+          find . -name "report.html" -type f | sort -r | while read -r report; do
+            dir_path=$(dirname "$report" | sed 's#^\./##')
+            if [ "$dir_path" != "." ]; then
+              branch_part=$(echo "$dir_path" | cut -d'/' -f1)
+              date_part=$(echo "$dir_path" | cut -d'/' -f2)
+              echo "              <div class=\"report-item\">" >> index.html
+              echo "                  <div class=\"branch-name\">Branch: $branch_part</div>" >> index.html
+              echo "                  <div class=\"date\">Data: $date_part</div>" >> index.html
+              echo "                  <div class=\"links\">" >> index.html
+              echo "                      <a href=\"$dir_path/report.html\" target=\"_blank\">📋 Report</a>" >> index.html
+              echo "                      <a href=\"$dir_path/log.html\" target=\"_blank\">📄 Log</a>" >> index.html
+              echo "                  </div>" >> index.html
+              echo "              </div>" >> index.html
+            fi
+          done
+          
+          cat >> index.html << HTML
+              
+              <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 0.8em;">
+                  <p>Gerado automaticamente pelo GitHub Actions em ${DATETIME}</p>
+              </div>
+          </body>
+          </html>
+          HTML
+
+      - name: 🚀 Commit and push to gh-pages
+        env:
+          BRANCH: ${{ needs.test.outputs.branch }}
+          DATE: ${{ needs.test.outputs.date }}
+          DATETIME: ${{ needs.test.outputs.datetime }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add .
+          
+          if git diff --staged --quiet; then
+            echo "ℹ️ Nenhuma alteração para committar"
+          else
+            git commit -m "📊 Add Robot Framework reports for ${BRANCH} (${DATETIME})"
+            git push origin gh-pages
+            echo "✅ Reports publicados no gh-pages"
+          fi
+
+      - name: 📢 Comment on PR with report links (if PR)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          BRANCH: ${{ needs.test.outputs.branch }}
+          DATE: ${{ needs.test.outputs.date }}
+        with:
+          github-token: ${{ secrets.GH_PAGES_PAT }}
+          script: |
+            const branch = process.env.BRANCH;
+            const date = process.env.DATE;
+            const safeBranch = branch.replace(/[/\\:*?"<>|]/g, '-');
+            const repoUrl = context.payload.repository.html_url;
+            const pagesUrl = `${repoUrl.replace('github.com', 'github.io').replace('https://', 'https://')}/`;
+            
+            const reportUrl = `${pagesUrl}${safeBranch}/${date}/report.html`;
+            const logUrl = `${pagesUrl}${safeBranch}/${date}/log.html`;
+            
+            const commentBody = `## 🤖 Robot Framework Test Reports
+            
+            Os relatórios de teste foram gerados e publicados no GitHub Pages:
+            
+            - 📋 **[Report HTML](${reportUrl})**
+            - 📄 **[Log HTML](${logUrl})**
+            - 📂 **[Todos os Reports](${pagesUrl})**
+            
+            > Branch: \`${branch}\` | Data: \`${date}\``;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
+
   
