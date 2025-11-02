@@ -88,21 +88,65 @@ jobs:
           echo "AVD created successfully at $AVD_DIR"
           ls -la "$HOME/.android/avd/" || true
 
-      - name: ▶️ Start emulator (headless)
+      - name: ▶️ Start emulator (headless) with enhanced diagnostics
         run: |
-          echo "Starting emulator github_ci_avd"
+          echo "Starting emulator github_ci_avd with enhanced monitoring"
+          
+          # Check if AVD exists
+          if [ ! -f "$HOME/.android/avd/github_ci_avd.ini" ]; then
+            echo "❌ AVD github_ci_avd.ini not found!"
+            ls -la "$HOME/.android/avd/" || true
+            exit 1
+          fi
+          
           EMU_BIN="$ANDROID_SDK_ROOT/emulator/emulator"
           if [ ! -x "$EMU_BIN" ]; then
             EMU_BIN="$ANDROID_SDK_ROOT/tools/emulator"
           fi
-          nohup "$EMU_BIN" -avd github_ci_avd -no-window -no-audio -no-snapshot -gpu swiftshader_indirect >/dev/null 2>&1 &
-          echo "Waiting for emulator process to appear..."
-          for i in $(seq 1 40); do
-            if adb devices | grep -q emulator-; then
-              echo "Emulator attached." && break
+          
+          if [ ! -x "$EMU_BIN" ]; then
+            echo "❌ Emulator binary not found at $EMU_BIN"
+            find "$ANDROID_SDK_ROOT" -name "emulator" -type f 2>/dev/null || true
+            exit 1
+          fi
+          
+          echo "Using emulator binary: $EMU_BIN"
+          
+          # Start emulator with more verbose options and save log
+          "$EMU_BIN" -avd github_ci_avd \
+            -no-window -no-audio -no-snapshot \
+            -gpu swiftshader_indirect \
+            -verbose -show-kernel \
+            -wipe-data \
+            > emulator.log 2>&1 &
+          
+          EMU_PID=$!
+          echo "Emulator started with PID: $EMU_PID"
+          
+          # Wait for emulator to appear in adb devices with timeout and diagnostics
+          echo "Waiting for emulator to appear in adb devices (max 3 minutes)..."
+          for i in $(seq 1 60); do
+            echo "Attempt $i/60: Checking adb devices..."
+            adb devices -l
+            if adb devices | grep -q "emulator-"; then
+              echo "✅ Emulator found in adb devices!"
+              break
+            fi
+            if ! kill -0 $EMU_PID 2>/dev/null; then
+              echo "❌ Emulator process died! Last 50 lines of emulator.log:"
+              tail -n 50 emulator.log || true
+              exit 1
             fi
             sleep 3
           done
+          
+          # Final check
+          if ! adb devices | grep -q "emulator-"; then
+            echo "❌ Emulator did not appear in adb devices after 3 minutes"
+            echo "Process status:" && ps aux | grep emulator || true
+            echo "Emulator log (last 100 lines):" && tail -n 100 emulator.log || true
+            exit 1
+          fi
 
       - name: ⏳ Wait for full boot (multi-signal, with timeouts and diagnostics)
         run: |
@@ -110,23 +154,35 @@ jobs:
           BOOT_TIMEOUT=600
           PM_TIMEOUT=300
 
-          echo "Waiting for adb device(s) to appear..."
-          adb wait-for-device
+          echo "Emulator is visible to adb, now waiting for full boot sequence..."
           echo "Connected devices:" && adb devices -l || true
 
+          # First ensure adb can connect to the device
+          echo "Testing basic adb connectivity..."
+          for i in $(seq 1 30); do
+            if adb shell echo "test" >/dev/null 2>&1; then
+              echo "✅ adb shell connectivity confirmed"
+              break
+            fi
+            echo "⏳ Attempt $i/30: adb shell not ready yet..."
+            sleep 2
+          done
+
           echo "⏳ Esperando sys.boot_completed ou dev.bootcomplete..."
-          if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
+          if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do echo "Checking boot progress..."; sleep 5; done'; then
             echo "⚠️ sys.boot_completed não sinalizou; tentando dev.bootcomplete..."
-            if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
+            if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do echo "Checking dev boot progress..."; sleep 5; done'; then
               echo "❌ Boot não completou dentro de ${BOOT_TIMEOUT}s. Coletando diagnósticos..."
-              echo "--- getprop sys.boot_completed / dev.bootcomplete / init.svc.bootanim ---"
-              adb shell getprop sys.boot_completed || true
-              adb shell getprop dev.bootcomplete || true
-              adb shell getprop init.svc.bootanim || true
-              echo "--- adb devices ---"
+              echo "--- Current device state ---"
               adb devices -l || true
-              echo "--- last 200 lines of logcat ---"
-              adb logcat -d | tail -n 200 || true
+              echo "--- Boot properties ---"
+              adb shell getprop sys.boot_completed || echo "sys.boot_completed failed"
+              adb shell getprop dev.bootcomplete || echo "dev.bootcomplete failed"  
+              adb shell getprop init.svc.bootanim || echo "init.svc.bootanim failed"
+              echo "--- Process check ---"
+              adb shell ps | grep -E "(zygote|system_server)" || echo "Core processes check failed"
+              echo "--- last 50 lines of logcat ---"
+              adb logcat -d | tail -n 50 || echo "logcat failed"
               exit 1
             fi
           fi
