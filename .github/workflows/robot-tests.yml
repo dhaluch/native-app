@@ -1,99 +1,114 @@
 name: Android Robot Tests WEBDRIVBER I/O
-  publish-gh-pages:
-    name: Publish Robot report to gh-pages
-    needs: test
+
+on:
+  push:
+    branches: [feature/*]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  test:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name != 'gh-pages' }}
+
+    outputs:
+      artifact_name: ${{ steps.set_meta.outputs.artifact_name }}
+      date: ${{ steps.set_meta.outputs.date }}
+      datetime: ${{ steps.set_meta.outputs.datetime }}
+      branch: ${{ steps.set_meta.outputs.branch }}
 
     steps:
-      - name: 📥 Download test artifact
-        uses: actions/download-artifact@v4
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
         with:
-          name: ${{ needs.test.outputs.artifact_name }}
-          path: site
+          python-version: '3.10'
 
-      - name: ✅ Ensure report exists
+      - name: 📦 Install dependencies (Python)
         run: |
-          if [ ! -f site/logs/report.html ]; then
-            echo "No Robot report found at site/logs/report.html — nothing to publish.";
-            exit 0;
+          python -m pip install --upgrade pip
+          pip install robotframework
+          pip install robotframework-appiumlibrary
+          # Se seus testes NÃO usam Browser/Playwright, remova as 2 linhas abaixo:
+          pip install robotframework-browser
+          rfbrowser init
+
+      - name: 🛠️ Set up Android SDK & system image (API 29)
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 29
+          components: |
+            platform-tools
+            emulator
+            platforms;android-29
+            system-images;android-29;google_apis;x86_64
+
+      - name: 🔧 Create AVD (github_ci_avd)
+        run: |
+          echo "Creating AVD 'github_ci_avd' (system-images;android-29;google_apis;x86_64)"
+          # Try common avdmanager locations; fall back to system avdmanager in PATH
+          if [ -x "$ANDROID_SDK_ROOT/tools/bin/avdmanager" ]; then
+            AVDMAN="$ANDROID_SDK_ROOT/tools/bin/avdmanager"
+          elif [ -x "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager" ]; then
+            AVDMAN="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager"
+          else
+            AVDMAN="$(which avdmanager 2>/dev/null || true)"
           fi
 
-      - name: ⚙️ Configure git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: � Publish to gh-pages using PAT
-        run: |
-          set -euo pipefail
-          cd site
-
-          # Read PAT at runtime and fail if not provided
-          GIT_PAT="${{ secrets.GH_PAGES_PAT }}"
-          if [ -z "${GIT_PAT}" ]; then
-            echo "GH_PAGES_PAT secret is not set. Cannot publish to gh-pages.";
-            exit 1;
+          if [ -z "$AVDMAN" ]; then
+            echo "avdmanager not found; ensure Android SDK cmdline-tools are available." && exit 1
           fi
 
-          echo "Contents of downloaded artifact:" && ls -R . || true
+          # Create AVD; if interactive prompts appear, answer 'no' to default skin prompt
+          printf "no\n" | "$AVDMAN" create avd -n github_ci_avd -k "system-images;android-29;google_apis;x86_64" --force || true
 
-          # Initialize git repo and push to gh-pages
-          git init
-          git checkout -b gh-pages
-          git add -A
-          git commit -m "Publish Robot report — ${{ needs.test.outputs.branch }} — ${{ needs.test.outputs.date }}" || true
-
-          # Push using PAT (masked). Using origin URL with PAT to authenticate.
-          REMOTE_URL="https://${GIT_PAT}@github.com/${{ github.repository }}.git"
-          git remote add origin "$REMOTE_URL"
-          git push --force origin gh-pages
-          mkdir -p $HOME/.android
-          touch $HOME/.android/emu-update-last-check.ini
-          mkdir -p $HOME/.android/avd
-
-      - name: 📲 Create Android emulator (API 29 - default x86_64)
+      - name: ▶️ Start emulator (headless)
         run: |
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          export ANDROID_AVD_HOME=$HOME/.android/avd
-          export PATH=$PATH:$ANDROID_HOME/emulator
+          echo "Starting emulator github_ci_avd"
+          EMU_BIN="$ANDROID_SDK_ROOT/emulator/emulator"
+          if [ ! -x "$EMU_BIN" ]; then
+            EMU_BIN="$ANDROID_SDK_ROOT/tools/emulator"
+          fi
+          nohup "$EMU_BIN" -avd github_ci_avd -no-window -no-audio -no-snapshot -gpu swiftshader_indirect >/dev/null 2>&1 &
+          echo "Waiting for emulator process to appear..."
+          for i in $(seq 1 40); do
+            if adb devices | grep -q emulator-; then
+              echo "Emulator attached." && break
+            fi
+            sleep 3
+          done
 
-          echo "y" | sdkmanager --install 'system-images;android-29;default;x86_64'
-
-          echo "no" | avdmanager create avd \
-            -n test \
-            -k 'system-images;android-29;default;x86_64' \
-            --device 'pixel' --force
-
-          $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
-          ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
-
-      - name: 🚀 Start Android emulator (software mode)
-        run: |
-          export PATH=$PATH:$ANDROID_HOME/emulator
-          nohup $ANDROID_HOME/emulator/emulator -avd test \
-            -accel off \
-            -gpu swiftshader_indirect \
-            -no-boot-anim \
-            -no-snapshot \
-            -no-snapshot-save \
-            -camera-back none \
-            -camera-front none \
-            -no-window \
-            -no-audio &
-          adb wait-for-device
-          adb devices
-
-      - name: ⏳ Wait for full boot (multi-signal, with timeouts)
+      - name: ⏳ Wait for full boot (multi-signal, with timeouts and diagnostics)
         run: |
           set -e
-          BOOT_TIMEOUT=420
-          PM_TIMEOUT=240
+          BOOT_TIMEOUT=600
+          PM_TIMEOUT=300
+
+          echo "Waiting for adb device(s) to appear..."
+          adb wait-for-device
+          echo "Connected devices:" && adb devices -l || true
 
           echo "⏳ Esperando sys.boot_completed ou dev.bootcomplete..."
           if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
-            echo "⚠️ sys.boot_completed não sinalizou; usando dev.bootcomplete..."
-            timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'
+            echo "⚠️ sys.boot_completed não sinalizou; tentando dev.bootcomplete..."
+            if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
+              echo "❌ Boot não completou dentro de ${BOOT_TIMEOUT}s. Coletando diagnósticos..."
+              echo "--- getprop sys.boot_completed / dev.bootcomplete / init.svc.bootanim ---"
+              adb shell getprop sys.boot_completed || true
+              adb shell getprop dev.bootcomplete || true
+              adb shell getprop init.svc.bootanim || true
+              echo "--- adb devices ---"
+              adb devices -l || true
+              echo "--- last 200 lines of logcat ---"
+              adb logcat -d | tail -n 200 || true
+              exit 1
+            fi
           fi
           echo "✅ Sinal de boot recebido."
 
@@ -103,6 +118,19 @@ name: Android Robot Tests WEBDRIVBER I/O
           echo "⏳ Esperando Package Manager (primeiro sinal)..."
           timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
           echo "✅ Package Manager respondeu uma vez."
+
+          echo "⏳ Stabilizing Package Manager (3 consecutive successes)..."
+          ok=0
+          for i in $(seq 1 60); do
+            if adb shell pm list packages >/dev/null 2>&1; then
+              ok=$((ok+1)); echo "✔ PM ok ($ok/3)"
+            else
+              ok=0; echo "✖ PM falhou — reset contador"
+            fi
+            [ $ok -ge 3 ] && break
+            sleep 2
+          done
+          [ $ok -ge 3 ] || { echo "❌ Package Manager não estabilizou."; adb shell service list | tail -n +1 || true; exit 1; }
 
       - name: 🔓 Keep screen awake & go Home (no-fail)
         run: |
@@ -237,3 +265,51 @@ name: Android Robot Tests WEBDRIVBER I/O
         with:
           name: ${{ steps.set_meta.outputs.artifact_name }}
           path: logs/
+
+  publish-gh-pages:
+    name: Publish Robot report to gh-pages
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name != 'gh-pages' }}
+
+    steps:
+      - name: 📥 Download test artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.test.outputs.artifact_name }}
+          path: site
+
+      - name: ✅ Ensure report exists
+        run: |
+          if [ ! -f site/logs/report.html ]; then
+            echo "No Robot report found at site/logs/report.html — nothing to publish."
+            exit 0
+          fi
+
+      - name: ⚙️ Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 🚀 Publish to gh-pages using PAT
+        run: |
+          set -euo pipefail
+          cd site
+
+          # Check for PAT secret
+          if [ -z "${{ secrets.GH_PAGES_PAT }}" ]; then
+            echo "GH_PAGES_PAT secret is not set. Cannot publish to gh-pages."
+            exit 1
+          fi
+
+          echo "Contents of downloaded artifact:" && ls -R . || true
+
+          # Initialize git repo and push to gh-pages
+          git init
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "Publish Robot report — ${{ needs.test.outputs.branch }} — ${{ needs.test.outputs.date }}" || true
+
+          # Push using PAT (masked)
+          git remote add origin "https://${{ secrets.GH_PAGES_PAT }}@github.com/${{ github.repository }}.git"
+          git push --force origin gh-pages
