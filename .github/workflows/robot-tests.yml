@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -39,52 +39,37 @@ jobs:
           pip install robotframework-browser
           rfbrowser init
 
-      - name: 🟢 Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: 🤖 Set up Android SDK
+      - name: 🛠️ Set up Android SDK & system image (API 29)
         uses: android-actions/setup-android@v3
+        with:
+          api-level: 29
+          components: |
+            platform-tools
+            emulator
+            platforms;android-29
+            system-images;android-29;google_apis;x86_64
 
-      - name: 🛠️ Configure PATH and Android folders
+      - name: 🔧 Create AVD (github_ci_avd)
         run: |
-          export PATH=$PATH:$ANDROID_HOME/emulator
-          mkdir -p $HOME/.android
-          touch $HOME/.android/emu-update-last-check.ini
-          mkdir -p $HOME/.android/avd
+          echo "Creating AVD 'github_ci_avd' (system-images;android-29;google_apis;x86_64)"
+          # Accept licenses and create AVD (force if exists)
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n github_ci_avd -k "system-images;android-29;google_apis;x86_64" --force || true
 
-      - name: 📲 Create Android emulator (API 29 - default x86_64)
+      - name: ▶️ Start emulator (headless)
         run: |
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          export ANDROID_AVD_HOME=$HOME/.android/avd
-          export PATH=$PATH:$ANDROID_HOME/emulator
-
-          echo "y" | sdkmanager --install 'system-images;android-29;default;x86_64'
-
-          echo "no" | avdmanager create avd \
-            -n test \
-            -k 'system-images;android-29;default;x86_64' \
-            --device 'pixel' --force
-
-          $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
-          ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
-
-      - name: 🚀 Start Android emulator (software mode)
-        run: |
-          export PATH=$PATH:$ANDROID_HOME/emulator
-          nohup $ANDROID_HOME/emulator/emulator -avd test \
-            -accel off \
-            -gpu swiftshader_indirect \
-            -no-boot-anim \
-            -no-snapshot \
-            -no-snapshot-save \
-            -camera-back none \
-            -camera-front none \
-            -no-window \
-            -no-audio &
-          adb wait-for-device
-          adb devices
+          echo "Starting emulator github_ci_avd"
+          EMU_BIN="$ANDROID_SDK_ROOT/emulator/emulator"
+          if [ ! -x "$EMU_BIN" ]; then
+            EMU_BIN="$ANDROID_SDK_ROOT/tools/emulator"
+          fi
+          nohup "$EMU_BIN" -avd github_ci_avd -no-window -no-audio -no-snapshot -gpu swiftshader_indirect >/dev/null 2>&1 &
+          echo "Waiting for emulator process to appear..."
+          for i in $(seq 1 40); do
+            if adb devices | grep -q emulator-; then
+              echo "Emulator attached." && break
+            fi
+            sleep 3
+          done
 
       - name: ⏳ Wait for full boot (multi-signal, with timeouts)
         run: |
@@ -239,5 +224,57 @@ jobs:
         with:
           name: ${{ steps.set_meta.outputs.artifact_name }}
           path: logs/
+
+  publish-gh-pages:
+    name: Publish Robot report to gh-pages
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name != 'gh-pages' }}
+
+    steps:
+      - name: 📥 Download test artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.test.outputs.artifact_name }}
+          path: site
+
+      - name: ⚙️ Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 🚀 Publish to gh-pages using PAT
+        env:
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ needs.test.outputs.branch }}
+          DATE: ${{ needs.test.outputs.date }}
+        run: |
+          set -euo pipefail
+          cd site
+
+          # Read PAT from secrets at runtime; if empty, skip publishing.
+          GIT_PAT="${{ secrets.GH_PAGES_PAT }}"
+          if [ -z "${GIT_PAT}" ]; then
+            echo "GH_PAGES_PAT not set — skipping publish to gh-pages."
+            exit 0
+          fi
+
+          echo "Contents of downloaded artifact:" && ls -R . || true
+
+          # Ensure report exists
+          if [ ! -f logs/report.html ]; then
+            echo "⚠️ logs/report.html not found in artifact — nothing to publish."
+            exit 0
+          fi
+
+          # Initialize a temporary repo and push to gh-pages
+          git init
+          git checkout -b gh-pages
+          git add -A
+          git commit -m "Publish Robot report — ${BRANCH} — ${DATE}" || true
+
+          # Push using PAT (masked)
+          echo "Pushing to gh-pages branch..."
+          git push --force https://${GIT_PAT}@github.com/${REPO} gh-pages
 
   
