@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   id-token: write
 
 jobs:
@@ -39,189 +39,63 @@ jobs:
           pip install robotframework-browser
           rfbrowser init
 
-      - name: 🛠️ Set up Android SDK & system image (API 29)
-        uses: android-actions/setup-android@v3
+      - name: 🟢 Install Node.js
+        uses: actions/setup-node@v4
         with:
-          api-level: 29
-          components: |
-            platform-tools
-            emulator
-            platforms;android-29
-            system-images;android-29;google_apis;x86_64
+          node-version: '18'
 
-      - name: 🔧 Create AVD (github_ci_avd) - manual creation
+      - name: 🤖 Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 🛠️ Configure PATH and Android folders
         run: |
-          echo "Creating AVD 'github_ci_avd' using manual approach to avoid JAXB issues"
-          
-          # Set up AVD directory
+          export PATH=$PATH:$ANDROID_HOME/emulator
+          mkdir -p $HOME/.android
+          touch $HOME/.android/emu-update-last-check.ini
           mkdir -p $HOME/.android/avd
-          AVD_NAME="github_ci_avd"
-          AVD_DIR="$HOME/.android/avd/${AVD_NAME}.avd"
-          
-          # Create AVD directory
-          mkdir -p "$AVD_DIR"
-          
-          # Find the correct system image path
-          echo "Locating system image directory..."
-          SYSTEM_IMAGE_DIR=""
-          for possible_path in \
-            "$ANDROID_SDK_ROOT/system-images/android-29/google_apis/x86_64" \
-            "$ANDROID_HOME/system-images/android-29/google_apis/x86_64" \
-            "/usr/local/lib/android/sdk/system-images/android-29/google_apis/x86_64"; do
-            if [ -d "$possible_path" ]; then
-              SYSTEM_IMAGE_DIR="$possible_path"
-              echo "✅ Found system image at: $SYSTEM_IMAGE_DIR"
-              break
-            fi
-          done
-          
-          if [ -z "$SYSTEM_IMAGE_DIR" ]; then
-            echo "❌ System image directory not found. Searching..."
-            find "$ANDROID_SDK_ROOT" -name "x86_64" -type d 2>/dev/null | grep android-29 || true
-            exit 1
-          fi
 
-          # Create config.ini for the AVD using echo with correct system image path
-          echo "hw.cpu.arch=x86_64" > "$AVD_DIR/config.ini"
-          echo "hw.cpu.ncore=2" >> "$AVD_DIR/config.ini"
-          echo "hw.ramSize=2048" >> "$AVD_DIR/config.ini"
-          echo "image.sysdir.1=${SYSTEM_IMAGE_DIR}/" >> "$AVD_DIR/config.ini"
-          echo "tag.display=Google APIs" >> "$AVD_DIR/config.ini"
-          echo "tag.id=google_apis" >> "$AVD_DIR/config.ini"
-          echo "AvdId=${AVD_NAME}" >> "$AVD_DIR/config.ini"
-          echo "avd.ini.displayname=${AVD_NAME}" >> "$AVD_DIR/config.ini"
-          echo "disk.dataPartition.size=6442450944" >> "$AVD_DIR/config.ini"
-          echo "hw.device.name=pixel" >> "$AVD_DIR/config.ini"
-          echo "hw.gpu.enabled=yes" >> "$AVD_DIR/config.ini"
-          echo "hw.gpu.mode=swiftshader_indirect" >> "$AVD_DIR/config.ini"
-          echo "hw.keyboard=yes" >> "$AVD_DIR/config.ini"
-          echo "hw.lcd.density=420" >> "$AVD_DIR/config.ini"
-          echo "hw.lcd.height=1920" >> "$AVD_DIR/config.ini"
-          echo "hw.lcd.width=1080" >> "$AVD_DIR/config.ini"
-          
-          # Create the AVD ini file using echo
-          echo "avd.ini.encoding=UTF-8" > "$HOME/.android/avd/${AVD_NAME}.ini"
-          echo "path=${AVD_DIR}" >> "$HOME/.android/avd/${AVD_NAME}.ini"
-          echo "path.rel=avd/${AVD_NAME}.avd" >> "$HOME/.android/avd/${AVD_NAME}.ini"
-          echo "target=android-29" >> "$HOME/.android/avd/${AVD_NAME}.ini"
-          
-          echo "AVD created successfully at $AVD_DIR"
-          ls -la "$HOME/.android/avd/" || true
-
-      - name: ▶️ Start emulator (headless) with enhanced diagnostics
+      - name: 📲 Create Android emulator (API 29 - default x86_64)
         run: |
-          echo "Starting emulator github_ci_avd with enhanced monitoring"
-          
-          # Check if AVD exists
-          if [ ! -f "$HOME/.android/avd/github_ci_avd.ini" ]; then
-            echo "❌ AVD github_ci_avd.ini not found!"
-            ls -la "$HOME/.android/avd/" || true
-            exit 1
-          fi
-          
-          # Verify AVD configuration
-          echo "📋 AVD Configuration:"
-          cat "$HOME/.android/avd/github_ci_avd.ini" || true
-          echo "📋 AVD config.ini:"
-          cat "$HOME/.android/avd/github_ci_avd.avd/config.ini" | head -10 || true
-          
-          # Check system image path from config
-          SYSIMG_PATH=$(grep "image.sysdir.1" "$HOME/.android/avd/github_ci_avd.avd/config.ini" | cut -d'=' -f2)
-          echo "System image path from config: $SYSIMG_PATH"
-          if [ ! -d "$SYSIMG_PATH" ]; then
-            echo "❌ System image directory does not exist: $SYSIMG_PATH"
-            echo "Available system images:"
-            find "$ANDROID_SDK_ROOT" -name "*system-images*" -type d 2>/dev/null || true
-            exit 1
-          fi
-          echo "✅ System image directory verified: $SYSIMG_PATH"
-          
-          EMU_BIN="$ANDROID_SDK_ROOT/emulator/emulator"
-          if [ ! -x "$EMU_BIN" ]; then
-            EMU_BIN="$ANDROID_SDK_ROOT/tools/emulator"
-          fi
-          
-          if [ ! -x "$EMU_BIN" ]; then
-            echo "❌ Emulator binary not found at $EMU_BIN"
-            find "$ANDROID_SDK_ROOT" -name "emulator" -type f 2>/dev/null || true
-            exit 1
-          fi
-          
-          echo "Using emulator binary: $EMU_BIN"
-          
-          # Start emulator with more verbose options and save log
-          "$EMU_BIN" -avd github_ci_avd \
-            -no-window -no-audio -no-snapshot \
-            -gpu swiftshader_indirect \
-            -verbose -show-kernel \
-            -wipe-data \
-            > emulator.log 2>&1 &
-          
-          EMU_PID=$!
-          echo "Emulator started with PID: $EMU_PID"
-          
-          # Wait for emulator to appear in adb devices with timeout and diagnostics
-          echo "Waiting for emulator to appear in adb devices (max 3 minutes)..."
-          for i in $(seq 1 60); do
-            echo "Attempt $i/60: Checking adb devices..."
-            adb devices -l
-            if adb devices | grep -q "emulator-"; then
-              echo "✅ Emulator found in adb devices!"
-              break
-            fi
-            if ! kill -0 $EMU_PID 2>/dev/null; then
-              echo "❌ Emulator process died! Last 50 lines of emulator.log:"
-              tail -n 50 emulator.log || true
-              exit 1
-            fi
-            sleep 3
-          done
-          
-          # Final check
-          if ! adb devices | grep -q "emulator-"; then
-            echo "❌ Emulator did not appear in adb devices after 3 minutes"
-            echo "Process status:" && ps aux | grep emulator || true
-            echo "Emulator log (last 100 lines):" && tail -n 100 emulator.log || true
-            exit 1
-          fi
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_AVD_HOME=$HOME/.android/avd
+          export PATH=$PATH:$ANDROID_HOME/emulator
 
-      - name: ⏳ Wait for full boot (multi-signal, with timeouts and diagnostics)
+          echo "y" | sdkmanager --install 'system-images;android-29;default;x86_64'
+
+          echo "no" | avdmanager create avd \
+            -n test \
+            -k 'system-images;android-29;default;x86_64' \
+            --device 'pixel' --force
+
+          $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
+          ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
+
+      - name: 🚀 Start Android emulator (software mode)
+        run: |
+          export PATH=$PATH:$ANDROID_HOME/emulator
+          nohup $ANDROID_HOME/emulator/emulator -avd test \
+            -accel off \
+            -gpu swiftshader_indirect \
+            -no-boot-anim \
+            -no-snapshot \
+            -no-snapshot-save \
+            -camera-back none \
+            -camera-front none \
+            -no-window \
+            -no-audio &
+          adb wait-for-device
+          adb devices
+
+      - name: ⏳ Wait for full boot (multi-signal, with timeouts)
         run: |
           set -e
-          BOOT_TIMEOUT=600
-          PM_TIMEOUT=300
-
-          echo "Emulator is visible to adb, now waiting for full boot sequence..."
-          echo "Connected devices:" && adb devices -l || true
-
-          # First ensure adb can connect to the device
-          echo "Testing basic adb connectivity..."
-          for i in $(seq 1 30); do
-            if adb shell echo "test" >/dev/null 2>&1; then
-              echo "✅ adb shell connectivity confirmed"
-              break
-            fi
-            echo "⏳ Attempt $i/30: adb shell not ready yet..."
-            sleep 2
-          done
+          BOOT_TIMEOUT=420
+          PM_TIMEOUT=240
 
           echo "⏳ Esperando sys.boot_completed ou dev.bootcomplete..."
-          if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do echo "Checking boot progress..."; sleep 5; done'; then
-            echo "⚠️ sys.boot_completed não sinalizou; tentando dev.bootcomplete..."
-            if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do echo "Checking dev boot progress..."; sleep 5; done'; then
-              echo "❌ Boot não completou dentro de ${BOOT_TIMEOUT}s. Coletando diagnósticos..."
-              echo "--- Current device state ---"
-              adb devices -l || true
-              echo "--- Boot properties ---"
-              adb shell getprop sys.boot_completed || echo "sys.boot_completed failed"
-              adb shell getprop dev.bootcomplete || echo "dev.bootcomplete failed"  
-              adb shell getprop init.svc.bootanim || echo "init.svc.bootanim failed"
-              echo "--- Process check ---"
-              adb shell ps | grep -E "(zygote|system_server)" || echo "Core processes check failed"
-              echo "--- last 50 lines of logcat ---"
-              adb logcat -d | tail -n 50 || echo "logcat failed"
-              exit 1
-            fi
+          if ! timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'; then
+            echo "⚠️ sys.boot_completed não sinalizou; usando dev.bootcomplete..."
+            timeout ${BOOT_TIMEOUT}s bash -c 'until adb shell getprop dev.bootcomplete 2>/dev/null | tr -d "\r" | grep -q "^1$"; do sleep 3; done'
           fi
           echo "✅ Sinal de boot recebido."
 
@@ -231,19 +105,6 @@ jobs:
           echo "⏳ Esperando Package Manager (primeiro sinal)..."
           timeout ${PM_TIMEOUT}s bash -c 'until adb shell pm list packages >/dev/null 2>&1; do sleep 3; done'
           echo "✅ Package Manager respondeu uma vez."
-
-          echo "⏳ Stabilizing Package Manager (3 consecutive successes)..."
-          ok=0
-          for i in $(seq 1 60); do
-            if adb shell pm list packages >/dev/null 2>&1; then
-              ok=$((ok+1)); echo "✔ PM ok ($ok/3)"
-            else
-              ok=0; echo "✖ PM falhou — reset contador"
-            fi
-            [ $ok -ge 3 ] && break
-            sleep 2
-          done
-          [ $ok -ge 3 ] || { echo "❌ Package Manager não estabilizou."; adb shell service list | tail -n +1 || true; exit 1; }
 
       - name: 🔓 Keep screen awake & go Home (no-fail)
         run: |
@@ -379,50 +240,4 @@ jobs:
           name: ${{ steps.set_meta.outputs.artifact_name }}
           path: logs/
 
-  publish-gh-pages:
-    name: Publish Robot report to gh-pages
-    needs: test
-    runs-on: ubuntu-latest
-    if: ${{ github.ref_name != 'gh-pages' }}
-
-    steps:
-      - name: 📥 Download test artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.test.outputs.artifact_name }}
-          path: site
-
-      - name: ✅ Ensure report exists
-        run: |
-          if [ ! -f site/logs/report.html ]; then
-            echo "No Robot report found at site/logs/report.html — nothing to publish."
-            exit 0
-          fi
-
-      - name: ⚙️ Configure git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: 🚀 Publish to gh-pages using PAT
-        run: |
-          set -euo pipefail
-          cd site
-
-          # Check for PAT secret
-          if [ -z "${{ secrets.GH_PAGES_PAT }}" ]; then
-            echo "GH_PAGES_PAT secret is not set. Cannot publish to gh-pages."
-            exit 1
-          fi
-
-          echo "Contents of downloaded artifact:" && ls -R . || true
-
-          # Initialize git repo and push to gh-pages
-          git init
-          git checkout -b gh-pages
-          git add -A
-          git commit -m "Publish Robot report — ${{ needs.test.outputs.branch }} — ${{ needs.test.outputs.date }}" || true
-
-          # Push using PAT (masked)
-          git remote add origin "https://${{ secrets.GH_PAGES_PAT }}@github.com/${{ github.repository }}.git"
-          git push --force origin gh-pages
+  
