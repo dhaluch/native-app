@@ -49,45 +49,23 @@ jobs:
             platforms;android-29
             system-images;android-29;google_apis;x86_64
 
-      - name: 🔧 Create AVD (github_ci_avd) — ensure cmdline-tools & system-image
+      - name: 🔧 Create AVD (github_ci_avd)
         run: |
-          set -euo pipefail
           echo "Creating AVD 'github_ci_avd' (system-images;android-29;google_apis;x86_64)"
-
-          # Locate sdkmanager and avdmanager (cmdline-tools or tools/bin)
-          if [ -x "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ]; then
-            SDKMAN="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
-            AVDMAN="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager"
-          elif [ -x "$ANDROID_SDK_ROOT/tools/bin/sdkmanager" ]; then
-            SDKMAN="$ANDROID_SDK_ROOT/tools/bin/sdkmanager"
+          # Try common avdmanager locations; fall back to system avdmanager in PATH
+          if [ -x "$ANDROID_SDK_ROOT/tools/bin/avdmanager" ]; then
             AVDMAN="$ANDROID_SDK_ROOT/tools/bin/avdmanager"
+          elif [ -x "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager" ]; then
+            AVDMAN="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager"
           else
-            echo "sdkmanager/avdmanager not found under $ANDROID_SDK_ROOT. Listing tree for debug:" && ls -la "$ANDROID_SDK_ROOT" || true
-            exit 1
+            AVDMAN="$(which avdmanager 2>/dev/null || true)"
           fi
 
-          echo "Using sdkmanager: $SDKMAN"
-
-          # Install cmdline-tools latest if necessary (some runners may not have it)
-          if ! "$SDKMAN" --list | grep -q "cmdline-tools"; then
-            echo "Installing cmdline-tools;latest"
-            "$SDKMAN" --install "cmdline-tools;latest" || true
+          if [ -z "$AVDMAN" ]; then
+            echo "avdmanager not found; ensure Android SDK cmdline-tools are available." && exit 1
           fi
 
-          # Ensure system-image and emulator/platform-tools are installed
-          echo "Installing system image and basic components (may be no-op if already installed)"
-          "$SDKMAN" --install "platform-tools" "emulator" "platforms;android-29" "system-images;android-29;google_apis;x86_64" || true
-
-          # Accept licenses
-          echo "Accepting SDK licenses (sdkmanager)"
-          yes | "$SDKMAN" --licenses || true
-
-          # Create AVD using the avdmanager we located
-          if [ ! -x "$AVDMAN" ]; then
-            echo "avdmanager not found at $AVDMAN — aborting." && exit 1
-          fi
-
-          # Create AVD; use --force to overwrite if exists. Use 'no' to any interactive prompts.
+          # Create AVD; if interactive prompts appear, answer 'no' to default skin prompt
           printf "no\n" | "$AVDMAN" create avd -n github_ci_avd -k "system-images;android-29;google_apis;x86_64" --force || true
 
       - name: ▶️ Start emulator (headless)
