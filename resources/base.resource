@@ -4,9 +4,12 @@ Documentation
 Library    AppiumLibrary
 Resource    screens/home.resource
 Resource    screens/login.resource
+Resource    stability.resource
 
 *** Keywords ***
 Start session
+    Log    🚀 Iniciando sessão Appium...
+    
     Open Application    http://localhost:4723
     ...    platformName=Android
     ...    automationName=UIAutomator2
@@ -14,17 +17,38 @@ Start session
     ...    app=${EXECDIR}/app/wdio.native.app.apk
     ...    udid=emulator-5554
     ...    autoGrantPermissions=true
-    ...    appium:disableHiddenApiPolicy=false
-    ...    appium:ignoreHiddenApiPolicyError=true
-    ...    appium:skipDeviceInitialization=true
     ...    appPackage=com.wdiodemoapp
     ...    appActivity=.MainActivity
-    ...    newCommandTimeout=600
-    ...    adbExecTimeout=200000
-    ...    uiautomator2ServerInstallTimeout=180000
-    ...    uiautomator2ServerLaunchTimeout=180000
+    ...    newCommandTimeout=${600}
+    ...    adbExecTimeout=${200000}
+    ...    uiautomator2ServerInstallTimeout=${180000}
+    ...    uiautomator2ServerLaunchTimeout=${180000}
     ...    noReset=true
-    ...    appium:skipServerInstallation=false
+    ...    appium:disableHiddenApiPolicy=${false}
+    ...    appium:ignoreHiddenApiPolicyError=${true}
+    ...    appium:skipDeviceInitialization=${true}
+    ...    appium:skipServerInstallation=${false}
+    ...    appium:systemPort=${8200}
+    ...    appium:clearSystemFiles=${true}
+    ...    appium:ensureWebviewsHavePages=${false}
+    ...    appium:nativeWebScreenshot=${true}
     
+    Log    ✅ Sessão Appium conectada, aguardando estabilização...
+    
+    # Aguardar um pouco para o app carregar
+    Sleep    5s
+    
+    # Tentar aguardar estabilização (com tratamento de erro)
+    TRY
+        Wait For App Stability    com.wdiodemoapp    15s
+        Log    ✅ App estabilizado com sucesso
+    EXCEPT    AS    ${error}
+        Log    ⚠️ Aviso: App pode não estar completamente estável: ${error}
+        Log    ℹ️ Continuando execução mesmo assim...
+    END
+    
+    Log    ✅ Sessão pronta para uso
+
 Finish session
+    Log    🔚 Finalizando sessão...
     Close Application

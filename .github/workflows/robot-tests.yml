@@ -70,7 +70,7 @@ jobs:
           $ANDROID_HOME/emulator/emulator -list-avds || echo "⚠️ Nenhum AVD listado!"
           ls -la "$ANDROID_AVD_HOME" || echo "⚠️ Diretório AVD não encontrado!"
 
-      - name: 🚀 Start Android emulator (software mode)
+      - name: 🚀 Start Android emulator (software mode with enhanced resources)
         run: |
           export PATH=$PATH:$ANDROID_HOME/emulator
           nohup $ANDROID_HOME/emulator/emulator -avd test \
@@ -82,7 +82,17 @@ jobs:
             -camera-back none \
             -camera-front none \
             -no-window \
-            -no-audio &
+            -no-audio \
+            -memory 4096 \
+            -cores 2 \
+            -partition-size 6144 \
+            -skin 1080x1920 \
+            -prop persist.sys.dalvik.vm.lib.2=libart.so \
+            -prop ro.kernel.android.checkjni=0 \
+            -prop ro.debuggable=1 \
+            -prop ro.secure=0 \
+            -prop ro.allow.mock.location=1 \
+            -prop service.adb.tcp.port=5555 &
           adb wait-for-device
           adb devices
 
@@ -111,6 +121,39 @@ jobs:
           adb shell settings put global stay_on_while_plugged_in 3 || true
           adb shell wm dismiss-keyguard || true
           adb shell am start -a android.intent.action.MAIN -c android.intent.category.HOME || true
+
+      - name: 🛡️ Configure system stability (Anti-ANR settings)
+        run: |
+          echo "🛡️ Aplicando configurações anti-ANR e estabilidade..."
+          
+          # Configurações para evitar ANRs
+          adb shell settings put global anr_show_background false || true
+          adb shell settings put secure anr_show_background false || true
+          adb shell settings put system anr_show_background false || true
+          
+          # Aumentar timeouts do sistema
+          adb shell settings put global long_press_timeout 1500 || true
+          adb shell settings put secure long_press_timeout 1500 || true
+          
+          # Desabilitar otimizações que podem causar lentidão
+          adb shell settings put global development_settings_enabled 1 || true
+          adb shell settings put global animator_duration_scale 0.5 || true
+          adb shell settings put global transition_animation_scale 0.5 || true
+          adb shell settings put global window_animation_scale 0.5 || true
+          
+          # Configurações de sistema UI
+          adb shell settings put secure show_ime_with_hard_keyboard 0 || true
+          adb shell settings put system screen_off_timeout 1800000 || true
+          
+          # Configurações de memória e performance
+          adb shell settings put global always_finish_activities 0 || true
+          adb shell settings put global activity_manager_constants max_cached_processes=32 || true
+          
+          # Desabilitar notificações que podem interferir
+          adb shell settings put global heads_up_notifications_enabled 0 || true
+          adb shell settings put secure backup_enabled 0 || true
+          
+          echo "✅ Configurações de estabilidade aplicadas"
 
       - name: ✅ Ensure Android user & settings service ready + provision
         run: |
@@ -239,5 +282,145 @@ jobs:
         with:
           name: ${{ steps.set_meta.outputs.artifact_name }}
           path: logs/
+
+  publish-gh-pages:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/feature/'))
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.test.outputs.artifact_name }}
+          path: ./robot-reports
+
+      - name: 📁 Prepare reports structure
+        env:
+          BRANCH: ${{ needs.test.outputs.branch }}
+          DATE: ${{ needs.test.outputs.date }}
+          DATETIME: ${{ needs.test.outputs.datetime }}
+        run: |
+          # Criar estrutura para publicação
+          mkdir -p public
+          
+          # Criar diretório para esta execução
+          SAFE_BRANCH=$(echo "$BRANCH" | sed 's#[/\\:*?"<>|]#-#g')
+          REPORT_DIR="public/${SAFE_BRANCH}/${DATE}"
+          mkdir -p "${REPORT_DIR}"
+          
+          # Copiar relatórios
+          cp -r ./robot-reports/* "${REPORT_DIR}/"
+          
+          # Criar index.html principal
+          cat > public/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="pt-BR">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Robot Framework Test Reports</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; }
+                  .container { max-width: 1200px; margin: 0 auto; }
+                  .header { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
+                  .report-item { background: white; border: 1px solid #e1e5e9; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+                  .branch-name { color: #0969da; font-weight: bold; font-size: 1.1em; }
+                  .date { color: #656d76; font-size: 0.9em; margin: 5px 0; }
+                  .links { margin-top: 10px; }
+                  .links a { 
+                      display: inline-block; margin-right: 15px; padding: 8px 16px; 
+                      background: #0969da; color: white; text-decoration: none; 
+                      border-radius: 6px; font-size: 0.9em;
+                  }
+                  .links a:hover { background: #0550ae; }
+                  .latest { border-left: 4px solid #28a745; }
+                  .emoji { font-size: 1.2em; margin-right: 8px; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <div class="header">
+                      <h1><span class="emoji">🤖</span>Robot Framework Test Reports</h1>
+                      <p>Relatórios de testes automatizados gerados pelo GitHub Actions</p>
+                  </div>
+          HTML
+          
+          # Adicionar execução atual
+          cat >> public/index.html << HTML
+                  <div class="report-item latest">
+                      <h3><span class="emoji">📊</span>Execução Mais Recente</h3>
+                      <div class="branch-name">Branch: ${BRANCH}</div>
+                      <div class="date">Data: ${DATETIME}</div>
+                      <div class="links">
+                          <a href="${SAFE_BRANCH}/${DATE}/report.html" target="_blank">📋 Report</a>
+                          <a href="${SAFE_BRANCH}/${DATE}/log.html" target="_blank">📄 Log</a>
+                      </div>
+                  </div>
+          HTML
+          
+          # Finalizar HTML
+          cat >> public/index.html << 'HTML'
+                  
+                  <div style="margin-top: 40px; padding: 20px; border-top: 1px solid #e1e5e9; color: #656d76; font-size: 0.9em; text-align: center;">
+                      <p>🔄 Atualizado automaticamente pelo GitHub Actions</p>
+                  </div>
+              </div>
+          </body>
+          </html>
+          HTML
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_PAGES_PAT }}
+          publish_dir: ./public
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          commit_message: '📊 Deploy Robot Framework reports (${{ needs.test.outputs.branch }} - ${{ needs.test.outputs.datetime }})'
+
+      - name: 📢 Comment on PR with report links (if PR)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          BRANCH: ${{ needs.test.outputs.branch }}
+          DATE: ${{ needs.test.outputs.date }}
+        with:
+          github-token: ${{ secrets.GH_PAGES_PAT }}
+          script: |
+            const branch = process.env.BRANCH;
+            const date = process.env.DATE;
+            const safeBranch = branch.replace(/[/\\:*?"<>|]/g, '-');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pagesUrl = `https://${owner}.github.io/${repo}/`;
+            
+            const reportUrl = `${pagesUrl}${safeBranch}/${date}/report.html`;
+            const logUrl = `${pagesUrl}${safeBranch}/${date}/log.html`;
+            
+            const commentBody = `## 🤖 Robot Framework Test Reports
+            
+            Os relatórios de teste foram gerados e publicados no GitHub Pages:
+            
+            - 📋 **[Report HTML](${reportUrl})**
+            - 📄 **[Log HTML](${logUrl})**  
+            - 📂 **[Todos os Reports](${pagesUrl})**
+            
+            > Branch: \`${branch}\` | Data: \`${date}\``;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            });
 
   
