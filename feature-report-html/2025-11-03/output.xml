@@ -1,68 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.2 (Python 3.10.19 on linux)" generated="2025-11-03T01:19:21.042094" rpa="false" schemaversion="5">
+<robot generator="Robot 7.3.2 (Python 3.10.19 on linux)" generated="2025-11-03T01:33:47.474896" rpa="false" schemaversion="5">
 <suite id="s1" name="Tests" source="/home/runner/work/native-app/native-app/tests">
 <suite id="s1-s1" name="Login" source="/home/runner/work/native-app/native-app/tests/Login.robot">
 <test id="s1-s1-t1" name="Deve realizar o cadastro com sucesso" line="12">
 <kw name="Start session" owner="base" type="SETUP">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:19:21.324209" level="INFO">🚀 Iniciando sessão Appium...</msg>
+<msg time="2025-11-03T01:33:47.675388" level="INFO">🚀 Iniciando sessão Appium...</msg>
 <arg>🚀 Iniciando sessão Appium...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:19:21.324081" elapsed="0.000218"/>
+<status status="PASS" start="2025-11-03T01:33:47.675238" elapsed="0.000224"/>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:19:48.904704" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:19:48.904257" elapsed="0.001898">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:19:48.908452" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:19:48.908801" level="FAIL">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:435)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:293)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:267)
-	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:250)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:266)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1294)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:911)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:131)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:611)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:552)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more
-</msg>
 <arg>http://localhost:4723</arg>
 <arg>platformName=Android</arg>
 <arg>automationName=UIAutomator2</arg>
@@ -70,235 +18,249 @@ Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: In
 <arg>app=${EXECDIR}/app/wdio.native.app.apk</arg>
 <arg>udid=emulator-5554</arg>
 <arg>autoGrantPermissions=true</arg>
-<arg>appium:disableHiddenApiPolicy=false</arg>
-<arg>appium:ignoreHiddenApiPolicyError=true</arg>
-<arg>appium:skipDeviceInitialization=true</arg>
 <arg>appPackage=com.wdiodemoapp</arg>
 <arg>appActivity=.MainActivity</arg>
-<arg>newCommandTimeout=600</arg>
-<arg>adbExecTimeout=200000</arg>
-<arg>uiautomator2ServerInstallTimeout=180000</arg>
-<arg>uiautomator2ServerLaunchTimeout=180000</arg>
+<arg>newCommandTimeout=${600}</arg>
+<arg>adbExecTimeout=${200000}</arg>
+<arg>uiautomator2ServerInstallTimeout=${180000}</arg>
+<arg>uiautomator2ServerLaunchTimeout=${180000}</arg>
 <arg>noReset=true</arg>
-<arg>appium:skipServerInstallation=false</arg>
-<arg>appium:uiautomator2ServerReadTimeout=240000</arg>
-<arg>appium:waitForIdleTimeout=10000</arg>
-<arg>appium:waitForQuiescence=true</arg>
-<arg>appium:waitActivity=.MainActivity</arg>
-<arg>appium:waitDuration=30000</arg>
-<arg>appium:androidInstallTimeout=180000</arg>
-<arg>appium:systemPort=8200</arg>
-<arg>appium:clearSystemFiles=true</arg>
-<arg>appium:ensureWebviewsHavePages=false</arg>
-<arg>appium:nativeWebScreenshot=true</arg>
-<arg>appium:reconnectRetries=3</arg>
-<arg>appium:maxTypingFrequency=60</arg>
+<arg>appium:disableHiddenApiPolicy=${false}</arg>
+<arg>appium:ignoreHiddenApiPolicyError=${true}</arg>
+<arg>appium:skipDeviceInitialization=${true}</arg>
+<arg>appium:skipServerInstallation=${false}</arg>
+<arg>appium:systemPort=${8200}</arg>
+<arg>appium:clearSystemFiles=${true}</arg>
+<arg>appium:ensureWebviewsHavePages=${false}</arg>
+<arg>appium:nativeWebScreenshot=${true}</arg>
 <doc>Opens a new application to the given Appium server.
 Capabilities of appium server, Android and iOS,
 Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="FAIL" start="2025-11-03T01:19:21.324430" elapsed="27.584660">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
-    [ Message content over the limit has been removed. ]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more</status>
+<status status="PASS" start="2025-11-03T01:33:47.675594" elapsed="28.780647"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:34:16.456731" level="INFO">✅ Sessão Appium conectada, aguardando estabilização...</msg>
 <arg>✅ Sessão Appium conectada, aguardando estabilização...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.909574" elapsed="0.000043"/>
+<status status="PASS" start="2025-11-03T01:34:16.456550" elapsed="0.000237"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-03T01:34:21.457199" level="INFO">Slept 5 seconds.</msg>
 <arg>5s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.909791" elapsed="0.000032"/>
+<status status="PASS" start="2025-11-03T01:34:16.456900" elapsed="5.000485"/>
 </kw>
 <try>
 <branch type="TRY">
 <kw name="Wait For App Stability" owner="stability">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:34:21.458627" level="INFO">⏳ Aguardando estabilização do app com.wdiodemoapp...</msg>
+<arg>⏳ Aguardando estabilização do app ${package_name}...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-03T01:34:21.458460" elapsed="0.000218"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Page Should Contain Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:22.443142" level="INFO">Current page contains element 'id=android:id/content'.</msg>
+<msg time="2025-11-03T01:34:22.443248" level="INFO">criteria is android:id/content</msg>
+<arg>id=android:id/content</arg>
+<doc>Verifies that the current page contains the element with the ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:21.459168" elapsed="0.984166"/>
+</kw>
+<arg>${timeout}</arg>
+<arg>3s</arg>
+<arg>Page Should Contain Element</arg>
+<arg>id=android:id/content</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2025-11-03T01:34:21.458874" elapsed="0.984543"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:34:22.443780" level="INFO">✅ Elemento android:id/content encontrado</msg>
+<arg>✅ Elemento android:id/content encontrado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-03T01:34:22.443613" elapsed="0.000217"/>
+</kw>
+<status status="PASS" start="2025-11-03T01:34:21.458761" elapsed="0.985105"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Elemento android:id/content não encontrado, tentando continuar...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:34:22.444031" elapsed="0.000020"/>
+</kw>
+<status status="NOT RUN" start="2025-11-03T01:34:22.443928" elapsed="0.000157"/>
+</branch>
+<status status="PASS" start="2025-11-03T01:34:21.458728" elapsed="0.985388"/>
+</try>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-03T01:34:25.444518" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-03T01:34:22.444220" elapsed="3.000440"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:34:25.445132" level="INFO">✅ App com.wdiodemoapp considerado estabilizado</msg>
+<arg>✅ App ${package_name} considerado estabilizado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-03T01:34:25.444880" elapsed="0.000302"/>
+</kw>
 <arg>com.wdiodemoapp</arg>
 <arg>15s</arg>
 <doc>Aguarda o aplicativo se estabilizar após o launch</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.910395" elapsed="0.000045"/>
+<status status="PASS" start="2025-11-03T01:34:21.457991" elapsed="3.987266"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:34:25.445527" level="INFO">✅ App estabilizado com sucesso</msg>
 <arg>✅ App estabilizado com sucesso</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.910619" elapsed="0.000032"/>
+<status status="PASS" start="2025-11-03T01:34:25.445424" elapsed="0.000147"/>
 </kw>
-<status status="NOT RUN" start="2025-11-03T01:19:48.909977" elapsed="0.000726"/>
+<status status="PASS" start="2025-11-03T01:34:21.457590" elapsed="3.988015"/>
 </branch>
 <branch type="EXCEPT" assign="${error}">
 <kw name="Log" owner="BuiltIn">
 <arg>⚠️ Aviso: App pode não estar completamente estável: ${error}</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.910914" elapsed="0.000031"/>
+<status status="NOT RUN" start="2025-11-03T01:34:25.445759" elapsed="0.000019"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
 <arg>ℹ️ Continuando execução mesmo assim...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.911098" elapsed="0.000030"/>
+<status status="NOT RUN" start="2025-11-03T01:34:25.445877" elapsed="0.000019"/>
 </kw>
-<status status="NOT RUN" start="2025-11-03T01:19:48.910770" elapsed="0.000411"/>
+<status status="NOT RUN" start="2025-11-03T01:34:25.445659" elapsed="0.000268"/>
 </branch>
-<status status="NOT RUN" start="2025-11-03T01:19:48.909907" elapsed="0.001346"/>
+<status status="PASS" start="2025-11-03T01:34:21.457500" elapsed="3.988456"/>
 </try>
 <kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:34:25.446139" level="INFO">✅ Sessão pronta para uso</msg>
 <arg>✅ Sessão pronta para uso</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:19:48.911432" elapsed="0.000031"/>
+<status status="PASS" start="2025-11-03T01:34:25.446046" elapsed="0.000141"/>
 </kw>
-<status status="FAIL" start="2025-11-03T01:19:21.323356" elapsed="27.588348">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
-    [ Message content over the limit has been removed. ]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more</status>
+<status status="PASS" start="2025-11-03T01:33:47.674501" elapsed="37.771745"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>WEBDRIVER</arg>
+<arg>300s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-03T01:34:25.446407" elapsed="1.798361"/>
+</kw>
+<kw name="Click Login" owner="home">
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:27.246784" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="󰍂"]'.</msg>
+<msg time="2025-11-03T01:34:32.234667" level="INFO">xpath criteria: //android.widget.TextView[@text="󰍂"]</msg>
+<arg>${LOGIN}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:27.245487" elapsed="4.989296"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${TEXTO_TELA_LOGIN}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-03T01:34:32.235004" elapsed="5.587677"/>
+</kw>
+<status status="PASS" start="2025-11-03T01:34:27.245084" elapsed="10.577730"/>
+</kw>
+<kw name="Preenche Sign Up Form" owner="login">
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>Login / Sign up Form</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-03T01:34:37.823540" elapsed="1.508086"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:39.333328" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="Sign up"]'.</msg>
+<msg time="2025-11-03T01:34:40.494994" level="INFO">xpath criteria: //android.widget.TextView[@text="Sign up"]</msg>
+<arg>xpath=${SIGN_UP}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:39.331865" elapsed="1.163246"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:40.496832" level="INFO">Typing text 'teste@gmail.com' into text field 'accessibility_id=input-email'</msg>
+<arg>accessibility_id=${INPUT_EMAIL}</arg>
+<arg>teste@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:40.495359" elapsed="2.514821"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:43.012950" level="INFO">Typing text 'Senha@123456' into text field 'accessibility_id=input-password'</msg>
+<arg>accessibility_id=${INPUT_PASSWORD}</arg>
+<arg>Senha@123456</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:43.010546" elapsed="1.550828"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:44.563079" level="INFO">Typing text 'Senha@123456' into text field 'accessibility_id=input-repeat-password'</msg>
+<arg>accessibility_id=${INPUT_CONFIRM_PASSWORD}</arg>
+<arg>Senha@123456</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:44.561620" elapsed="1.237888"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:45.801373" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="button-SIGN UP"]/android.view.ViewGroup'.</msg>
+<msg time="2025-11-03T01:34:47.062577" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="button-SIGN UP"]/android.view.ViewGroup</msg>
+<arg>xpath=${BTN_SIGN_UP}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:45.799846" elapsed="1.262877"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${Mensagem_Sucesso_Cadastro}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-03T01:34:47.063025" elapsed="7.603186"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:54.668035" level="INFO">Clicking element 'ID=android:id/button1'.</msg>
+<msg time="2025-11-03T01:34:54.973729" level="INFO">criteria is android:id/button1</msg>
+<arg>ID=${BTN_OK_SUCCESS}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:54.666529" elapsed="0.307358"/>
+</kw>
+<doc>Preenche o formulário de cadastro e realiza o cadastro com sucesso</doc>
+<status status="PASS" start="2025-11-03T01:34:37.823161" elapsed="17.150886"/>
+</kw>
+<kw name="Click Login acima do formulario" owner="login">
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:34:54.977121" level="INFO">Clicking element 'xpath=(//android.widget.TextView[@text="Login"])[1]'.</msg>
+<msg time="2025-11-03T01:34:56.773069" level="INFO">xpath criteria: (//android.widget.TextView[@text="Login"])[1]</msg>
+<arg>xpath=${LOGIN_ACCES_FORM}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:34:54.974905" elapsed="1.798307"/>
+</kw>
+<doc>Clica no botão de login acima do formulário</doc>
+<status status="PASS" start="2025-11-03T01:34:54.974418" elapsed="1.798944"/>
 </kw>
 <kw name="Finish session" owner="base" type="TEARDOWN">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:19:48.912825" level="INFO">🔚 Finalizando sessão...</msg>
+<msg time="2025-11-03T01:34:56.774290" level="INFO">🔚 Finalizando sessão...</msg>
 <arg>🔚 Finalizando sessão...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:19:48.912644" elapsed="0.000269"/>
+<status status="PASS" start="2025-11-03T01:34:56.774124" elapsed="0.000222"/>
 </kw>
 <kw name="Close Application" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:19:48.913837" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:19:48.913386" elapsed="0.000701">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:19:48.916246" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:19:48.916467" level="FAIL">No application is open</msg>
 <doc>Closes the current application and the webdriver session.</doc>
-<status status="FAIL" start="2025-11-03T01:19:48.913082" elapsed="0.003553">No application is open</status>
+<status status="PASS" start="2025-11-03T01:34:56.774473" elapsed="4.224053"/>
 </kw>
-<status status="FAIL" start="2025-11-03T01:19:48.912144" elapsed="0.004662">No application is open</status>
+<status status="PASS" start="2025-11-03T01:34:56.773753" elapsed="4.224912"/>
 </kw>
 <doc>Verifica se o usuário consegue realizar o cadastro com sucesso na aplicação</doc>
-<status status="FAIL" start="2025-11-03T01:19:21.322259" elapsed="27.594645">Setup failed:
-SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
-    [ Message content over the limit has been removed. ]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more
-
-Also teardown failed:
-No application is open</status>
+<status status="PASS" start="2025-11-03T01:33:47.673405" elapsed="73.325318"/>
 </test>
 <test id="s1-s1-t2" name="Deve realizar o login com sucesso" line="19">
 <kw name="Start session" owner="base" type="SETUP">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:19:48.918826" level="INFO">🚀 Iniciando sessão Appium...</msg>
+<msg time="2025-11-03T01:35:01.000520" level="INFO">🚀 Iniciando sessão Appium...</msg>
 <arg>🚀 Iniciando sessão Appium...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:19:48.918672" elapsed="0.000229"/>
+<status status="PASS" start="2025-11-03T01:35:01.000383" elapsed="0.000196"/>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:20:10.163004" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:20:10.162697" elapsed="0.000593">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:20:10.164521" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:20:10.164778" level="FAIL">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:435)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:293)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:267)
-	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:250)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:266)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1294)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:911)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:131)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:611)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:552)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more
-</msg>
 <arg>http://localhost:4723</arg>
 <arg>platformName=Android</arg>
 <arg>automationName=UIAutomator2</arg>
@@ -306,193 +268,234 @@ Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: In
 <arg>app=${EXECDIR}/app/wdio.native.app.apk</arg>
 <arg>udid=emulator-5554</arg>
 <arg>autoGrantPermissions=true</arg>
-<arg>appium:disableHiddenApiPolicy=false</arg>
-<arg>appium:ignoreHiddenApiPolicyError=true</arg>
-<arg>appium:skipDeviceInitialization=true</arg>
 <arg>appPackage=com.wdiodemoapp</arg>
 <arg>appActivity=.MainActivity</arg>
-<arg>newCommandTimeout=600</arg>
-<arg>adbExecTimeout=200000</arg>
-<arg>uiautomator2ServerInstallTimeout=180000</arg>
-<arg>uiautomator2ServerLaunchTimeout=180000</arg>
+<arg>newCommandTimeout=${600}</arg>
+<arg>adbExecTimeout=${200000}</arg>
+<arg>uiautomator2ServerInstallTimeout=${180000}</arg>
+<arg>uiautomator2ServerLaunchTimeout=${180000}</arg>
 <arg>noReset=true</arg>
-<arg>appium:skipServerInstallation=false</arg>
-<arg>appium:uiautomator2ServerReadTimeout=240000</arg>
-<arg>appium:waitForIdleTimeout=10000</arg>
-<arg>appium:waitForQuiescence=true</arg>
-<arg>appium:waitActivity=.MainActivity</arg>
-<arg>appium:waitDuration=30000</arg>
-<arg>appium:androidInstallTimeout=180000</arg>
-<arg>appium:systemPort=8200</arg>
-<arg>appium:clearSystemFiles=true</arg>
-<arg>appium:ensureWebviewsHavePages=false</arg>
-<arg>appium:nativeWebScreenshot=true</arg>
-<arg>appium:reconnectRetries=3</arg>
-<arg>appium:maxTypingFrequency=60</arg>
+<arg>appium:disableHiddenApiPolicy=${false}</arg>
+<arg>appium:ignoreHiddenApiPolicyError=${true}</arg>
+<arg>appium:skipDeviceInitialization=${true}</arg>
+<arg>appium:skipServerInstallation=${false}</arg>
+<arg>appium:systemPort=${8200}</arg>
+<arg>appium:clearSystemFiles=${true}</arg>
+<arg>appium:ensureWebviewsHavePages=${false}</arg>
+<arg>appium:nativeWebScreenshot=${true}</arg>
 <doc>Opens a new application to the given Appium server.
 Capabilities of appium server, Android and iOS,
 Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="FAIL" start="2025-11-03T01:19:48.919073" elapsed="21.245959">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
-    [ Message content over the limit has been removed. ]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more</status>
+<status status="PASS" start="2025-11-03T01:35:01.000731" elapsed="20.282178"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:35:21.283440" level="INFO">✅ Sessão Appium conectada, aguardando estabilização...</msg>
 <arg>✅ Sessão Appium conectada, aguardando estabilização...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.165361" elapsed="0.000029"/>
+<status status="PASS" start="2025-11-03T01:35:21.283241" elapsed="0.000252"/>
 </kw>
 <kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-03T01:35:26.283894" level="INFO">Slept 5 seconds.</msg>
 <arg>5s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.165501" elapsed="0.000020"/>
+<status status="PASS" start="2025-11-03T01:35:21.283606" elapsed="5.000505"/>
 </kw>
 <try>
 <branch type="TRY">
 <kw name="Wait For App Stability" owner="stability">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:35:26.285867" level="INFO">⏳ Aguardando estabilização do app com.wdiodemoapp...</msg>
+<arg>⏳ Aguardando estabilização do app ${package_name}...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-03T01:35:26.285609" elapsed="0.000343"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Page Should Contain Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:26.876368" level="INFO">Current page contains element 'id=android:id/content'.</msg>
+<msg time="2025-11-03T01:35:26.876504" level="INFO">criteria is android:id/content</msg>
+<arg>id=android:id/content</arg>
+<doc>Verifies that the current page contains the element with the ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:26.286700" elapsed="0.589973"/>
+</kw>
+<arg>${timeout}</arg>
+<arg>3s</arg>
+<arg>Page Should Contain Element</arg>
+<arg>id=android:id/content</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2025-11-03T01:35:26.286256" elapsed="0.590542"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:35:26.877335" level="INFO">✅ Elemento android:id/content encontrado</msg>
+<arg>✅ Elemento android:id/content encontrado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-03T01:35:26.877081" elapsed="0.000337"/>
+</kw>
+<status status="PASS" start="2025-11-03T01:35:26.286080" elapsed="0.591406"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Elemento android:id/content não encontrado, tentando continuar...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:35:26.877756" elapsed="0.000037"/>
+</kw>
+<status status="NOT RUN" start="2025-11-03T01:35:26.877576" elapsed="0.000273"/>
+</branch>
+<status status="PASS" start="2025-11-03T01:35:26.286032" elapsed="0.591864"/>
+</try>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-03T01:35:29.878394" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-03T01:35:26.878053" elapsed="3.000501"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:35:29.879089" level="INFO">✅ App com.wdiodemoapp considerado estabilizado</msg>
+<arg>✅ App ${package_name} considerado estabilizado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-03T01:35:29.878806" elapsed="0.000347"/>
+</kw>
 <arg>com.wdiodemoapp</arg>
 <arg>15s</arg>
 <doc>Aguarda o aplicativo se estabilizar após o launch</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.165870" elapsed="0.000031"/>
+<status status="PASS" start="2025-11-03T01:35:26.284883" elapsed="3.594356"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:35:29.879508" level="INFO">✅ App estabilizado com sucesso</msg>
 <arg>✅ App estabilizado com sucesso</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.166011" elapsed="0.000020"/>
+<status status="PASS" start="2025-11-03T01:35:29.879410" elapsed="0.000144"/>
 </kw>
-<status status="NOT RUN" start="2025-11-03T01:20:10.165618" elapsed="0.000444"/>
+<status status="PASS" start="2025-11-03T01:35:26.284372" elapsed="3.595216"/>
 </branch>
 <branch type="EXCEPT" assign="${error}">
 <kw name="Log" owner="BuiltIn">
 <arg>⚠️ Aviso: App pode não estar completamente estável: ${error}</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.166189" elapsed="0.000019"/>
+<status status="NOT RUN" start="2025-11-03T01:35:29.879746" elapsed="0.000021"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
 <arg>ℹ️ Continuando execução mesmo assim...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.166337" elapsed="0.000020"/>
+<status status="NOT RUN" start="2025-11-03T01:35:29.879883" elapsed="0.000033"/>
 </kw>
-<status status="NOT RUN" start="2025-11-03T01:20:10.166103" elapsed="0.000285"/>
+<status status="NOT RUN" start="2025-11-03T01:35:29.879645" elapsed="0.000328"/>
 </branch>
-<status status="NOT RUN" start="2025-11-03T01:20:10.165572" elapsed="0.000844"/>
+<status status="PASS" start="2025-11-03T01:35:26.284255" elapsed="3.595768"/>
 </try>
 <kw name="Log" owner="BuiltIn">
+<msg time="2025-11-03T01:35:29.880334" level="INFO">✅ Sessão pronta para uso</msg>
 <arg>✅ Sessão pronta para uso</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:20:10.166502" elapsed="0.000019"/>
+<status status="PASS" start="2025-11-03T01:35:29.880178" elapsed="0.000225"/>
 </kw>
-<status status="FAIL" start="2025-11-03T01:19:48.918260" elapsed="21.248399">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
-    [ Message content over the limit has been removed. ]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more</status>
+<status status="PASS" start="2025-11-03T01:35:00.999842" elapsed="28.880650"/>
+</kw>
+<kw name="Limpa os Campos de Login" owner="login">
+<kw name="Clear Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:29.883479" level="INFO">Clear text field 'accessibility_id=input-email'</msg>
+<arg>accessibility_id=${INPUT_EMAIL}</arg>
+<doc>Clears the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:29.881182" elapsed="0.549729"/>
+</kw>
+<kw name="Clear Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:30.433695" level="INFO">Clear text field 'accessibility_id=input-password'</msg>
+<arg>accessibility_id=${INPUT_PASSWORD}</arg>
+<doc>Clears the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:30.431234" elapsed="0.938699"/>
+</kw>
+<doc>Limpa os campos de email e senha no formulário de login</doc>
+<status status="PASS" start="2025-11-03T01:35:29.880784" elapsed="1.489332"/>
+</kw>
+<kw name="Click Login" owner="home">
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:31.373604" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="󰍂"]'.</msg>
+<msg time="2025-11-03T01:35:36.662981" level="INFO">xpath criteria: //android.widget.TextView[@text="󰍂"]</msg>
+<arg>${LOGIN}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:31.371362" elapsed="5.291758"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${TEXTO_TELA_LOGIN}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-03T01:35:36.663405" elapsed="2.248577"/>
+</kw>
+<status status="PASS" start="2025-11-03T01:35:31.370805" elapsed="7.541314"/>
+</kw>
+<kw name="Realizar Login com sucesso" owner="login">
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:38.914180" level="INFO">Typing text 'teste@gmail.com' into text field 'accessibility_id=input-email'</msg>
+<arg>accessibility_id=${INPUT_EMAIL}</arg>
+<arg>teste@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:38.912809" elapsed="1.152750"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:40.068337" level="INFO">Typing text 'Senha@123456' into text field 'accessibility_id=input-password'</msg>
+<arg>accessibility_id=${INPUT_PASSWORD}</arg>
+<arg>Senha@123456</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:40.065890" elapsed="1.355719"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:41.426948" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="button-LOGIN"]/android.view.ViewGroup'.</msg>
+<msg time="2025-11-03T01:35:42.810530" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="button-LOGIN"]/android.view.ViewGroup</msg>
+<arg>xpath=${BTN_LOGIN}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:41.421935" elapsed="1.388753"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${Mensagem_Sucesso_Login}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-03T01:35:42.810995" elapsed="5.169248"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-03T01:35:47.981969" level="INFO">Clicking element 'ID=android:id/button1'.</msg>
+<msg time="2025-11-03T01:35:48.970910" level="INFO">criteria is android:id/button1</msg>
+<arg>ID=${BTN_OK_SUCCESS}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-03T01:35:47.980532" elapsed="0.990529"/>
+</kw>
+<doc>Preenche o formulário de login e realiza o login com sucesso</doc>
+<status status="PASS" start="2025-11-03T01:35:38.912429" elapsed="10.058746"/>
 </kw>
 <kw name="Finish session" owner="base" type="TEARDOWN">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:20:10.167403" level="INFO">🔚 Finalizando sessão...</msg>
+<msg time="2025-11-03T01:35:48.972113" level="INFO">🔚 Finalizando sessão...</msg>
 <arg>🔚 Finalizando sessão...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:20:10.167279" elapsed="0.000178"/>
+<status status="PASS" start="2025-11-03T01:35:48.971972" elapsed="0.000201"/>
 </kw>
 <kw name="Close Application" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:20:10.168092" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:20:10.167782" elapsed="0.000495">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:20:10.169446" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:20:10.169614" level="FAIL">No application is open</msg>
 <doc>Closes the current application and the webdriver session.</doc>
-<status status="FAIL" start="2025-11-03T01:20:10.167592" elapsed="0.002177">No application is open</status>
+<status status="PASS" start="2025-11-03T01:35:48.972317" elapsed="2.356260"/>
 </kw>
-<status status="FAIL" start="2025-11-03T01:20:10.166936" elapsed="0.002969">No application is open</status>
+<status status="PASS" start="2025-11-03T01:35:48.971600" elapsed="2.357121"/>
 </kw>
 <doc>Verifica se o usuário consegue realizar o login com sucesso na aplicação</doc>
-<status status="FAIL" start="2025-11-03T01:19:48.917338" elapsed="21.252621">Setup failed:
-SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
-Stacktrace:
-io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
-	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
-	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
-	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
-	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
-    [ Message content over the limit has been removed. ]
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
-	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
-	at java.lang.Thread.run(Thread.java:919)
-Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
-	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
-	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
-	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
-	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
-	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
-	... 34 more
-
-Also teardown failed:
-No application is open</status>
+<status status="PASS" start="2025-11-03T01:35:00.999093" elapsed="50.329741"/>
 </test>
-<status status="FAIL" start="2025-11-03T01:19:21.072872" elapsed="49.097684"/>
+<status status="PASS" start="2025-11-03T01:33:47.496787" elapsed="123.832730"/>
 </suite>
-<status status="FAIL" start="2025-11-03T01:19:21.043001" elapsed="49.128254"/>
+<status status="PASS" start="2025-11-03T01:33:47.475824" elapsed="123.854366"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="2" skip="0">All Tests</stat>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat name="Tests" id="s1" pass="0" fail="2" skip="0">Tests</stat>
-<stat name="Login" id="s1-s1" pass="0" fail="2" skip="0">Tests.Login</stat>
+<stat name="Tests" id="s1" pass="2" fail="0" skip="0">Tests</stat>
+<stat name="Login" id="s1-s1" pass="2" fail="0" skip="0">Tests.Login</stat>
 </suite>
 </statistics>
 <errors>
-<msg time="2025-11-03T01:19:48.908452" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:19:48.916246" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:20:10.164521" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:20:10.169446" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
 </errors>
 </robot>
