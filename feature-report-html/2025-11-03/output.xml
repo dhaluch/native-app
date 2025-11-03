@@ -1,808 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.2 (Python 3.10.19 on linux)" generated="2025-11-03T01:02:01.942373" rpa="false" schemaversion="5">
+<robot generator="Robot 7.3.2 (Python 3.10.19 on linux)" generated="2025-11-03T01:19:21.042094" rpa="false" schemaversion="5">
 <suite id="s1" name="Tests" source="/home/runner/work/native-app/native-app/tests">
 <suite id="s1-s1" name="Login" source="/home/runner/work/native-app/native-app/tests/Login.robot">
 <test id="s1-s1-t1" name="Deve realizar o cadastro com sucesso" line="12">
 <kw name="Start session" owner="base" type="SETUP">
-<kw name="Setup Anti ANR Environment" owner="stability">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.215495" level="INFO">🛡️ Configurando ambiente anti-ANR...</msg>
-<arg>🛡️ Configurando ambiente anti-ANR...</arg>
+<msg time="2025-11-03T01:19:21.324209" level="INFO">🚀 Iniciando sessão Appium...</msg>
+<arg>🚀 Iniciando sessão Appium...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.215374" elapsed="0.000183"/>
-</kw>
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:02.216197" level="INFO">Starting process:
-adb devices</msg>
-<msg time="2025-11-03T01:02:02.216645" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:02.219027" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:02.219185" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.215977" elapsed="0.003245"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:02.219316" elapsed="0.000057"/>
-</return>
-<msg time="2025-11-03T01:02:02.219858" level="INFO">${devices} = List of devices attached
-emulator-5554	device
-</msg>
-<var>${devices}</var>
-<arg>devices</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:02.215733" elapsed="0.004151"/>
-</kw>
-<kw name="Should Contain" owner="BuiltIn">
-<arg>${devices}</arg>
-<arg>emulator-5554</arg>
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.220006" elapsed="0.000192"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:02.221117" level="INFO">Starting process:
-adb "shell settings put global anr_show_background false"</msg>
-<msg time="2025-11-03T01:02:02.221499" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:02.223123" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:02.223259" level="INFO">${result} = &lt;result object with rc 1&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.220897" elapsed="0.002388"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:02.223344" elapsed="0.000037"/>
-</return>
-<arg>shell settings put global anr_show_background false</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:02.220516" elapsed="0.003288"/>
-</kw>
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:02.224442" level="INFO">Starting process:
-adb "shell settings put global animator_duration_scale 0.5"</msg>
-<msg time="2025-11-03T01:02:02.224749" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:02.226336" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:02.226457" level="INFO">${result} = &lt;result object with rc 1&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.224241" elapsed="0.002241"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:02.226538" elapsed="0.000033"/>
-</return>
-<arg>shell settings put global animator_duration_scale 0.5</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:02.223963" elapsed="0.003022"/>
-</kw>
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:02.227645" level="INFO">Starting process:
-adb "shell settings put system screen_off_timeout 1800000"</msg>
-<msg time="2025-11-03T01:02:02.227936" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:02.229537" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:02.229654" level="INFO">${result} = &lt;result object with rc 1&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.227453" elapsed="0.002225"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:02.229734" elapsed="0.000034"/>
-</return>
-<arg>shell settings put system screen_off_timeout 1800000</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:02.227180" elapsed="0.003010"/>
-</kw>
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.230417" level="INFO">✅ Configurações anti-ANR aplicadas via Appium</msg>
-<arg>✅ Configurações anti-ANR aplicadas via Appium</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.230313" elapsed="0.000149"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:02.220313" elapsed="0.010178"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Algumas configurações anti-ANR não puderam ser aplicadas</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.230625" elapsed="0.000017"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:02.230536" elapsed="0.000134"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:02.220269" elapsed="0.010426"/>
-</try>
-<kw name="Wait For System UI Stability" owner="stability">
-<for flavor="IN RANGE">
-<iter>
-<try>
-<branch type="TRY">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.232242" level="INFO">Tentativa 1 de 3 para estabilizar System UI</msg>
-<arg>Tentativa ${i+1} de ${retry_count} para estabilizar System UI</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.231756" elapsed="0.000537"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:02.233053" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.232902" elapsed="0.000791">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:02.234809" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.234971" level="FAIL">No application is open</msg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Waits until the element specified by the ``locator`` appears on the current page.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.232556" elapsed="0.002629">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:02.235316" level="INFO">${result} = False</msg>
-<var>${result}</var>
-<arg>Wait Until Page Contains Element</arg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.232417" elapsed="0.002923"/>
-</kw>
-<if>
-<branch type="IF" condition="${result}">
-<kw name="Log" owner="BuiltIn">
-<arg>✅ System UI estável na tentativa ${i+1}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.235588" elapsed="0.000019"/>
-</kw>
-<return>
-<status status="NOT RUN" start="2025-11-03T01:02:02.235689" elapsed="0.000015"/>
-</return>
-<status status="NOT RUN" start="2025-11-03T01:02:02.235428" elapsed="0.000297"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:02.235403" elapsed="0.000342"/>
-</if>
-<kw name="Handle System UI Issues" owner="stability">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.236496" level="INFO">🔧 Tentando resolver problemas do System UI...</msg>
-<arg>🔧 Tentando resolver problemas do System UI...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.236394" elapsed="0.000147"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Get Webelements" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:02.237021" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.236891" elapsed="0.000294">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:02.238204" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.238330" level="FAIL">No application is open</msg>
-<var>${anr_elements}</var>
-<arg>xpath=//*[contains(@text, 'isn't responding') or contains(@text, 'not responding')]</arg>
-<doc>Returns a list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.236704" elapsed="0.001747">No application is open</status>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Log" owner="BuiltIn">
-<arg>🚫 Dialog ANR detectado, tentando fechar...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.238732" elapsed="0.000019"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<var>${wait_btn}</var>
-<arg>Click Element</arg>
-<arg>xpath=//*[contains(@text, 'Wait') or contains(@text, 'Aguardar')]</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.238848" elapsed="0.000017"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${wait_btn}">
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//*[contains(@text, 'OK') or contains(@text, 'Close') or contains(@text, 'Fechar')]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.239140" elapsed="0.000016"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:02.239050" elapsed="0.000154"/>
-</branch>
-<status status="NOT RUN" start="2025-11-03T01:02:02.238910" elapsed="0.000315"/>
-</if>
-<var name="${element}"/>
-<status status="NOT RUN" start="2025-11-03T01:02:02.238633" elapsed="0.000612"/>
-</iter>
-<var>${element}</var>
-<value>@{anr_elements}</value>
-<status status="NOT RUN" start="2025-11-03T01:02:02.238525" elapsed="0.000744"/>
-</for>
-<status status="FAIL" start="2025-11-03T01:02:02.236618" elapsed="0.002703">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.239541" level="INFO">ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</msg>
-<arg>ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.239440" elapsed="0.000144"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:02.239361" elapsed="0.000251"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:02.236588" elapsed="0.003049"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:02.240066" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.239943" elapsed="0.000347">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:02.241368" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.241502" level="FAIL">No application is open</msg>
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.239770" elapsed="0.001844">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.241739" elapsed="0.000022"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:02.239692" elapsed="0.002115">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.242036" level="INFO">⚠️ Não foi possível pressionar HOME</msg>
-<arg>⚠️ Não foi possível pressionar HOME</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.241934" elapsed="0.000145"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:02.241849" elapsed="0.000259"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:02.239669" elapsed="0.002466"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:02.242607" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.242483" elapsed="0.000258">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:02.243771" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.243898" level="FAIL">No application is open</msg>
-<arg>187</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.242299" elapsed="0.001709">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>1s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.244132" elapsed="0.000041"/>
-</kw>
-<kw name="Press Keycode" owner="AppiumLibrary">
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.244266" elapsed="0.000016"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:02.244358" elapsed="0.000015"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:02.242214" elapsed="0.002202">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:02.244636" level="INFO">ℹ️ Não foi possível limpar tasks recentes</msg>
-<arg>ℹ️ Não foi possível limpar tasks recentes</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.244538" elapsed="0.000142"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:02.244463" elapsed="0.000245"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:02.242188" elapsed="0.002545"/>
-</try>
-<doc>Tenta resolver problemas comuns do System UI</doc>
-<status status="PASS" start="2025-11-03T01:02:02.236114" elapsed="0.008663"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<msg time="2025-11-03T01:02:07.245121" level="INFO">Slept 5 seconds.</msg>
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2025-11-03T01:02:02.244860" elapsed="5.000434"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:02.231661" elapsed="5.013697"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Tentativa ${i+1} falhou, tentando novamente...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.245633" elapsed="0.000029"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>3s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.245836" elapsed="0.000023"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:07.245438" elapsed="0.000455"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:02.231637" elapsed="5.014292"/>
-</try>
-<var name="${i}">0</var>
-<status status="PASS" start="2025-11-03T01:02:02.231606" elapsed="5.014350"/>
-</iter>
-<iter>
-<try>
-<branch type="TRY">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:07.247068" level="INFO">Tentativa 2 de 3 para estabilizar System UI</msg>
-<arg>Tentativa ${i+1} de ${retry_count} para estabilizar System UI</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.246491" elapsed="0.000636"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:07.247953" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.247801" elapsed="0.000346">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:07.249265" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.249406" level="FAIL">No application is open</msg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Waits until the element specified by the ``locator`` appears on the current page.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.247430" elapsed="0.002100">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:07.249631" level="INFO">${result} = False</msg>
-<var>${result}</var>
-<arg>Wait Until Page Contains Element</arg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.247276" elapsed="0.002376"/>
-</kw>
-<if>
-<branch type="IF" condition="${result}">
-<kw name="Log" owner="BuiltIn">
-<arg>✅ System UI estável na tentativa ${i+1}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.249887" elapsed="0.000018"/>
-</kw>
-<return>
-<status status="NOT RUN" start="2025-11-03T01:02:07.249946" elapsed="0.000015"/>
-</return>
-<status status="NOT RUN" start="2025-11-03T01:02:07.249732" elapsed="0.000249"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:07.249709" elapsed="0.000290"/>
-</if>
-<kw name="Handle System UI Issues" owner="stability">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:07.250891" level="INFO">🔧 Tentando resolver problemas do System UI...</msg>
-<arg>🔧 Tentando resolver problemas do System UI...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.250796" elapsed="0.000140"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Get Webelements" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:07.251419" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.251289" elapsed="0.000273">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:07.252603" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.252729" level="FAIL">No application is open</msg>
-<var>${anr_elements}</var>
-<arg>xpath=//*[contains(@text, 'isn't responding') or contains(@text, 'not responding')]</arg>
-<doc>Returns a list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.251094" elapsed="0.001792">No application is open</status>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Log" owner="BuiltIn">
-<arg>🚫 Dialog ANR detectado, tentando fechar...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.253223" elapsed="0.000021"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<var>${wait_btn}</var>
-<arg>Click Element</arg>
-<arg>xpath=//*[contains(@text, 'Wait') or contains(@text, 'Aguardar')]</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.253347" elapsed="0.000017"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${wait_btn}">
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//*[contains(@text, 'OK') or contains(@text, 'Close') or contains(@text, 'Fechar')]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.253511" elapsed="0.000017"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:07.253427" elapsed="0.000127"/>
-</branch>
-<status status="NOT RUN" start="2025-11-03T01:02:07.253412" elapsed="0.000167"/>
-</if>
-<var name="${element}"/>
-<status status="NOT RUN" start="2025-11-03T01:02:07.253112" elapsed="0.000488"/>
-</iter>
-<var>${element}</var>
-<value>@{anr_elements}</value>
-<status status="NOT RUN" start="2025-11-03T01:02:07.252993" elapsed="0.000629"/>
-</for>
-<status status="FAIL" start="2025-11-03T01:02:07.251010" elapsed="0.002666">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:07.253902" level="INFO">ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</msg>
-<arg>ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.253799" elapsed="0.000147"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:07.253718" elapsed="0.000257"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:07.250981" elapsed="0.003020"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:07.254470" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.254340" elapsed="0.000269">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:07.255638" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.255769" level="FAIL">No application is open</msg>
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.254131" elapsed="0.001794">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.256082" elapsed="0.000023"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:07.254055" elapsed="0.002097">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:07.256394" level="INFO">⚠️ Não foi possível pressionar HOME</msg>
-<arg>⚠️ Não foi possível pressionar HOME</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.256291" elapsed="0.000146"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:07.256208" elapsed="0.000257"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:07.254032" elapsed="0.002458"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:07.256961" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.256799" elapsed="0.000295">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:07.258120" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.258261" level="FAIL">No application is open</msg>
-<arg>187</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:07.256624" elapsed="0.001793">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>1s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.258564" elapsed="0.000022"/>
-</kw>
-<kw name="Press Keycode" owner="AppiumLibrary">
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.258674" elapsed="0.000022"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:07.258778" elapsed="0.000015"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:07.256546" elapsed="0.002292">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:07.259061" level="INFO">ℹ️ Não foi possível limpar tasks recentes</msg>
-<arg>ℹ️ Não foi possível limpar tasks recentes</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.258961" elapsed="0.000145"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:07.258879" elapsed="0.000256"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:07.256523" elapsed="0.002652"/>
-</try>
-<doc>Tenta resolver problemas comuns do System UI</doc>
-<status status="PASS" start="2025-11-03T01:02:07.250533" elapsed="0.008690"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<msg time="2025-11-03T01:02:12.259544" level="INFO">Slept 5 seconds.</msg>
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2025-11-03T01:02:07.259310" elapsed="5.000382"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:07.246377" elapsed="5.013382"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Tentativa ${i+1} falhou, tentando novamente...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.260015" elapsed="0.000028"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>3s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.260152" elapsed="0.000055"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:12.259826" elapsed="0.000417"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:07.246345" elapsed="5.013932"/>
-</try>
-<var name="${i}">1</var>
-<status status="PASS" start="2025-11-03T01:02:07.246299" elapsed="5.014006"/>
-</iter>
-<iter>
-<try>
-<branch type="TRY">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:12.261494" level="INFO">Tentativa 3 de 3 para estabilizar System UI</msg>
-<arg>Tentativa ${i+1} de ${retry_count} para estabilizar System UI</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.260810" elapsed="0.000748"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:12.262596" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.262439" elapsed="0.000357">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:12.263911" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.264054" level="FAIL">No application is open</msg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Waits until the element specified by the ``locator`` appears on the current page.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.262034" elapsed="0.002169">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:12.264349" level="INFO">${result} = False</msg>
-<var>${result}</var>
-<arg>Wait Until Page Contains Element</arg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.261695" elapsed="0.002690"/>
-</kw>
-<if>
-<branch type="IF" condition="${result}">
-<kw name="Log" owner="BuiltIn">
-<arg>✅ System UI estável na tentativa ${i+1}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.264658" elapsed="0.000019"/>
-</kw>
-<return>
-<status status="NOT RUN" start="2025-11-03T01:02:12.264720" elapsed="0.000017"/>
-</return>
-<status status="NOT RUN" start="2025-11-03T01:02:12.264500" elapsed="0.000260"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:12.264470" elapsed="0.000309"/>
-</if>
-<kw name="Handle System UI Issues" owner="stability">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:12.265515" level="INFO">🔧 Tentando resolver problemas do System UI...</msg>
-<arg>🔧 Tentando resolver problemas do System UI...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.265421" elapsed="0.000140"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Get Webelements" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:12.266014" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.265889" elapsed="0.000286">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:12.267245" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.267388" level="FAIL">No application is open</msg>
-<var>${anr_elements}</var>
-<arg>xpath=//*[contains(@text, 'isn't responding') or contains(@text, 'not responding')]</arg>
-<doc>Returns a list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.265720" elapsed="0.001834">No application is open</status>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Log" owner="BuiltIn">
-<arg>🚫 Dialog ANR detectado, tentando fechar...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.267866" elapsed="0.000020"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<var>${wait_btn}</var>
-<arg>Click Element</arg>
-<arg>xpath=//*[contains(@text, 'Wait') or contains(@text, 'Aguardar')]</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.267986" elapsed="0.000017"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${wait_btn}">
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//*[contains(@text, 'OK') or contains(@text, 'Close') or contains(@text, 'Fechar')]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.268147" elapsed="0.000037"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:12.268065" elapsed="0.000151"/>
-</branch>
-<status status="NOT RUN" start="2025-11-03T01:02:12.268049" elapsed="0.000188"/>
-</if>
-<var name="${element}"/>
-<status status="NOT RUN" start="2025-11-03T01:02:12.267764" elapsed="0.000494"/>
-</iter>
-<var>${element}</var>
-<value>@{anr_elements}</value>
-<status status="NOT RUN" start="2025-11-03T01:02:12.267656" elapsed="0.000624"/>
-</for>
-<status status="FAIL" start="2025-11-03T01:02:12.265636" elapsed="0.002741">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:12.268612" level="INFO">ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</msg>
-<arg>ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.268507" elapsed="0.000150"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:12.268421" elapsed="0.000265"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:12.265607" elapsed="0.003103"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:12.269138" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.269016" elapsed="0.000277">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:12.270310" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.270435" level="FAIL">No application is open</msg>
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.268840" elapsed="0.001749">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.270754" elapsed="0.000023"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:12.268764" elapsed="0.002063">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:12.271053" level="INFO">⚠️ Não foi possível pressionar HOME</msg>
-<arg>⚠️ Não foi possível pressionar HOME</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.270950" elapsed="0.000145"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:12.270870" elapsed="0.000254"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:12.268741" elapsed="0.002408"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:12.271623" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.271500" elapsed="0.000401">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:12.272925" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.273055" level="FAIL">No application is open</msg>
-<arg>187</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:12.271316" elapsed="0.001905">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>1s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.273395" elapsed="0.000025"/>
-</kw>
-<kw name="Press Keycode" owner="AppiumLibrary">
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.273510" elapsed="0.000016"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:12.273606" elapsed="0.000015"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:12.271234" elapsed="0.002431">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:12.273882" level="INFO">ℹ️ Não foi possível limpar tasks recentes</msg>
-<arg>ℹ️ Não foi possível limpar tasks recentes</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.273782" elapsed="0.000144"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:12.273706" elapsed="0.000248"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:12.271208" elapsed="0.002771"/>
-</try>
-<doc>Tenta resolver problemas comuns do System UI</doc>
-<status status="PASS" start="2025-11-03T01:02:12.265139" elapsed="0.008885"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.274370" level="INFO">Slept 5 seconds.</msg>
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2025-11-03T01:02:12.274106" elapsed="5.000414"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:12.260688" elapsed="5.013898"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Tentativa ${i+1} falhou, tentando novamente...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.274843" elapsed="0.000029"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>3s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.274987" elapsed="0.000021"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:17.274654" elapsed="0.000387"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:12.260657" elapsed="5.014417"/>
-</try>
-<var name="${i}">2</var>
-<status status="PASS" start="2025-11-03T01:02:12.260618" elapsed="5.014482"/>
-</iter>
-<var>${i}</var>
-<value>${retry_count}</value>
-<status status="PASS" start="2025-11-03T01:02:02.231230" elapsed="15.043904"/>
-</for>
-<kw name="Fail" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.275651" level="FAIL">❌ System UI não se estabilizou após 3 tentativas</msg>
-<arg>❌ System UI não se estabilizou após ${retry_count} tentativas</arg>
-<doc>Fails the test with the given message and optionally alters its tags.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.275280" elapsed="0.000459">❌ System UI não se estabilizou após 3 tentativas</status>
-</kw>
-<doc>Aguarda o System UI se estabilizar e resolve problemas comuns</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.230973" elapsed="15.044901">❌ System UI não se estabilizou após 3 tentativas</status>
-</kw>
-<kw name="Log" owner="BuiltIn">
-<arg>✅ Ambiente anti-ANR configurado</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.276011" elapsed="0.000024"/>
-</kw>
-<doc>Configura o ambiente para evitar ANRs (chamado antes dos testes)</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.214750" elapsed="15.061373">❌ System UI não se estabilizou após 3 tentativas</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.276287" elapsed="0.000024"/>
+<status status="PASS" start="2025-11-03T01:19:21.324081" elapsed="0.000218"/>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
+<kw name="Capture Page Screenshot" owner="AppiumLibrary">
+<msg time="2025-11-03T01:19:48.904704" level="FAIL">No application is open</msg>
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<status status="FAIL" start="2025-11-03T01:19:48.904257" elapsed="0.001898">No application is open</status>
+</kw>
+<msg time="2025-11-03T01:19:48.908452" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:19:48.908801" level="FAIL">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:435)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:293)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:267)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:250)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:266)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1294)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:911)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:131)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:611)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more
+</msg>
 <arg>http://localhost:4723</arg>
 <arg>platformName=Android</arg>
 <arg>automationName=UIAutomator2</arg>
@@ -839,849 +99,206 @@ Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.276419" elapsed="0.000019"/>
-</kw>
-<kw name="Wait For App Stability" owner="stability">
-<arg>com.wdiodemoapp</arg>
-<arg>30s</arg>
-<doc>Aguarda o aplicativo se estabilizar após o launch</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.276752" elapsed="0.000026"/>
+<status status="FAIL" start="2025-11-03T01:19:21.324430" elapsed="27.584660">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
+    [ Message content over the limit has been removed. ]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more</status>
 </kw>
 <kw name="Log" owner="BuiltIn">
-<arg>✅ Sessão Appium iniciada com sucesso e app estabilizado</arg>
+<arg>✅ Sessão Appium conectada, aguardando estabilização...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.276868" elapsed="0.000015"/>
+<status status="NOT RUN" start="2025-11-03T01:19:48.909574" elapsed="0.000043"/>
 </kw>
-<status status="FAIL" start="2025-11-03T01:02:02.214341" elapsed="15.062623">❌ System UI não se estabilizou após 3 tentativas</status>
+<kw name="Sleep" owner="BuiltIn">
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2025-11-03T01:19:48.909791" elapsed="0.000032"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For App Stability" owner="stability">
+<arg>com.wdiodemoapp</arg>
+<arg>15s</arg>
+<doc>Aguarda o aplicativo se estabilizar após o launch</doc>
+<status status="NOT RUN" start="2025-11-03T01:19:48.910395" elapsed="0.000045"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>✅ App estabilizado com sucesso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:19:48.910619" elapsed="0.000032"/>
+</kw>
+<status status="NOT RUN" start="2025-11-03T01:19:48.909977" elapsed="0.000726"/>
+</branch>
+<branch type="EXCEPT" assign="${error}">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Aviso: App pode não estar completamente estável: ${error}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:19:48.910914" elapsed="0.000031"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>ℹ️ Continuando execução mesmo assim...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:19:48.911098" elapsed="0.000030"/>
+</kw>
+<status status="NOT RUN" start="2025-11-03T01:19:48.910770" elapsed="0.000411"/>
+</branch>
+<status status="NOT RUN" start="2025-11-03T01:19:48.909907" elapsed="0.001346"/>
+</try>
+<kw name="Log" owner="BuiltIn">
+<arg>✅ Sessão pronta para uso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:19:48.911432" elapsed="0.000031"/>
+</kw>
+<status status="FAIL" start="2025-11-03T01:19:21.323356" elapsed="27.588348">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
+    [ Message content over the limit has been removed. ]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more</status>
 </kw>
 <kw name="Finish session" owner="base" type="TEARDOWN">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.277594" level="INFO">🔚 Finalizando sessão...</msg>
+<msg time="2025-11-03T01:19:48.912825" level="INFO">🔚 Finalizando sessão...</msg>
 <arg>🔚 Finalizando sessão...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.277496" elapsed="0.000146"/>
+<status status="PASS" start="2025-11-03T01:19:48.912644" elapsed="0.000269"/>
 </kw>
 <kw name="Close Application" owner="AppiumLibrary">
 <kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:17.278047" level="FAIL">No application is open</msg>
+<msg time="2025-11-03T01:19:48.913837" level="FAIL">No application is open</msg>
 <doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.277911" elapsed="0.000317">No application is open</status>
+<status status="FAIL" start="2025-11-03T01:19:48.913386" elapsed="0.000701">No application is open</status>
 </kw>
-<msg time="2025-11-03T01:02:17.279311" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.279491" level="FAIL">No application is open</msg>
+<msg time="2025-11-03T01:19:48.916246" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:19:48.916467" level="FAIL">No application is open</msg>
 <doc>Closes the current application and the webdriver session.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.277747" elapsed="0.001875">No application is open</status>
+<status status="FAIL" start="2025-11-03T01:19:48.913082" elapsed="0.003553">No application is open</status>
 </kw>
-<status status="FAIL" start="2025-11-03T01:02:17.277230" elapsed="0.002500">No application is open</status>
+<status status="FAIL" start="2025-11-03T01:19:48.912144" elapsed="0.004662">No application is open</status>
 </kw>
 <doc>Verifica se o usuário consegue realizar o cadastro com sucesso na aplicação</doc>
-<status status="FAIL" start="2025-11-03T01:02:02.213418" elapsed="15.066368">Setup failed:
-❌ System UI não se estabilizou após 3 tentativas
+<status status="FAIL" start="2025-11-03T01:19:21.322259" elapsed="27.594645">Setup failed:
+SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
+    [ Message content over the limit has been removed. ]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more
 
 Also teardown failed:
 No application is open</status>
 </test>
 <test id="s1-s1-t2" name="Deve realizar o login com sucesso" line="19">
 <kw name="Start session" owner="base" type="SETUP">
-<kw name="Setup Anti ANR Environment" owner="stability">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.281231" level="INFO">🛡️ Configurando ambiente anti-ANR...</msg>
-<arg>🛡️ Configurando ambiente anti-ANR...</arg>
+<msg time="2025-11-03T01:19:48.918826" level="INFO">🚀 Iniciando sessão Appium...</msg>
+<arg>🚀 Iniciando sessão Appium...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.281110" elapsed="0.000169"/>
-</kw>
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:17.281865" level="INFO">Starting process:
-adb devices</msg>
-<msg time="2025-11-03T01:02:17.282326" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:17.284557" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:17.284686" level="INFO">${result} = &lt;result object with rc 0&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.281658" elapsed="0.003054"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:17.284772" elapsed="0.000038"/>
-</return>
-<msg time="2025-11-03T01:02:17.285290" level="INFO">${devices} = List of devices attached
-emulator-5554	device
-</msg>
-<var>${devices}</var>
-<arg>devices</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:17.281423" elapsed="0.003893"/>
-</kw>
-<kw name="Should Contain" owner="BuiltIn">
-<arg>${devices}</arg>
-<arg>emulator-5554</arg>
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.285436" elapsed="0.000153"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:17.286487" level="INFO">Starting process:
-adb "shell settings put global anr_show_background false"</msg>
-<msg time="2025-11-03T01:02:17.286833" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:17.288473" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:17.288590" level="INFO">${result} = &lt;result object with rc 1&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.286277" elapsed="0.002337"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:17.288671" elapsed="0.000033"/>
-</return>
-<arg>shell settings put global anr_show_background false</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:17.285823" elapsed="0.003293"/>
-</kw>
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:17.289744" level="INFO">Starting process:
-adb "shell settings put global animator_duration_scale 0.5"</msg>
-<msg time="2025-11-03T01:02:17.290042" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:17.291635" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:17.291752" level="INFO">${result} = &lt;result object with rc 1&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.289555" elapsed="0.002222"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:17.291834" elapsed="0.000030"/>
-</return>
-<arg>shell settings put global animator_duration_scale 0.5</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:17.289304" elapsed="0.002993"/>
-</kw>
-<kw name="Execute ADB Command" owner="stability">
-<kw name="Run Process" owner="Process">
-<msg time="2025-11-03T01:02:17.292892" level="INFO">Starting process:
-adb "shell settings put system screen_off_timeout 1800000"</msg>
-<msg time="2025-11-03T01:02:17.293219" level="INFO">Waiting for process to complete.</msg>
-<msg time="2025-11-03T01:02:17.294720" level="INFO">Process completed.</msg>
-<msg time="2025-11-03T01:02:17.294829" level="INFO">${result} = &lt;result object with rc 1&gt;</msg>
-<var>${result}</var>
-<arg>adb</arg>
-<arg>${command}</arg>
-<arg>shell=True</arg>
-<doc>Runs a process and waits for it to complete.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.292705" elapsed="0.002148"/>
-</kw>
-<return>
-<value>${result.stdout}</value>
-<status status="PASS" start="2025-11-03T01:02:17.294908" elapsed="0.000030"/>
-</return>
-<arg>shell settings put system screen_off_timeout 1800000</arg>
-<doc>Executa comando ADB e retorna resultado</doc>
-<status status="PASS" start="2025-11-03T01:02:17.292460" elapsed="0.002909"/>
-</kw>
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.295591" level="INFO">✅ Configurações anti-ANR aplicadas via Appium</msg>
-<arg>✅ Configurações anti-ANR aplicadas via Appium</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.295487" elapsed="0.000147"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:17.285680" elapsed="0.009983"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Algumas configurações anti-ANR não puderam ser aplicadas</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.295828" elapsed="0.000017"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:17.295739" elapsed="0.000136"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:17.285645" elapsed="0.010254"/>
-</try>
-<kw name="Wait For System UI Stability" owner="stability">
-<for flavor="IN RANGE">
-<iter>
-<try>
-<branch type="TRY">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.297280" level="INFO">Tentativa 1 de 3 para estabilizar System UI</msg>
-<arg>Tentativa ${i+1} de ${retry_count} para estabilizar System UI</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.296818" elapsed="0.000512"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:17.298056" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.297920" elapsed="0.000336">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:17.299330" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.299482" level="FAIL">No application is open</msg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Waits until the element specified by the ``locator`` appears on the current page.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.297580" elapsed="0.002049">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:17.299728" level="INFO">${result} = False</msg>
-<var>${result}</var>
-<arg>Wait Until Page Contains Element</arg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.297447" elapsed="0.002303"/>
-</kw>
-<if>
-<branch type="IF" condition="${result}">
-<kw name="Log" owner="BuiltIn">
-<arg>✅ System UI estável na tentativa ${i+1}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.299977" elapsed="0.000018"/>
-</kw>
-<return>
-<status status="NOT RUN" start="2025-11-03T01:02:17.300033" elapsed="0.000014"/>
-</return>
-<status status="NOT RUN" start="2025-11-03T01:02:17.299829" elapsed="0.000237"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:17.299807" elapsed="0.000277"/>
-</if>
-<kw name="Handle System UI Issues" owner="stability">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.300939" level="INFO">🔧 Tentando resolver problemas do System UI...</msg>
-<arg>🔧 Tentando resolver problemas do System UI...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.300846" elapsed="0.000138"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Get Webelements" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:17.301465" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.301338" elapsed="0.000274">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:17.302665" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.302813" level="FAIL">No application is open</msg>
-<var>${anr_elements}</var>
-<arg>xpath=//*[contains(@text, 'isn't responding') or contains(@text, 'not responding')]</arg>
-<doc>Returns a list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.301141" elapsed="0.001840">No application is open</status>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Log" owner="BuiltIn">
-<arg>🚫 Dialog ANR detectado, tentando fechar...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303349" elapsed="0.000021"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<var>${wait_btn}</var>
-<arg>Click Element</arg>
-<arg>xpath=//*[contains(@text, 'Wait') or contains(@text, 'Aguardar')]</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303473" elapsed="0.000017"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${wait_btn}">
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//*[contains(@text, 'OK') or contains(@text, 'Close') or contains(@text, 'Fechar')]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303640" elapsed="0.000017"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303554" elapsed="0.000131"/>
-</branch>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303538" elapsed="0.000168"/>
-</if>
-<var name="${element}"/>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303249" elapsed="0.000478"/>
-</iter>
-<var>${element}</var>
-<value>@{anr_elements}</value>
-<status status="NOT RUN" start="2025-11-03T01:02:17.303084" elapsed="0.000666"/>
-</for>
-<status status="FAIL" start="2025-11-03T01:02:17.301058" elapsed="0.002743">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.304028" level="INFO">ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</msg>
-<arg>ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.303927" elapsed="0.000144"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:17.303844" elapsed="0.000254"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:17.301030" elapsed="0.003092"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:17.304571" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.304449" elapsed="0.000258">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:17.305723" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.305874" level="FAIL">No application is open</msg>
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.304275" elapsed="0.001707">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.306108" elapsed="0.000027"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:17.304196" elapsed="0.002015">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.306443" level="INFO">⚠️ Não foi possível pressionar HOME</msg>
-<arg>⚠️ Não foi possível pressionar HOME</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.306341" elapsed="0.000145"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:17.306255" elapsed="0.000261"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:17.304153" elapsed="0.002389"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:17.306968" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.306843" elapsed="0.000292">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:17.308156" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.308308" level="FAIL">No application is open</msg>
-<arg>187</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.306678" elapsed="0.001733">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>1s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.308535" elapsed="0.000022"/>
-</kw>
-<kw name="Press Keycode" owner="AppiumLibrary">
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.308647" elapsed="0.000016"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:17.308741" elapsed="0.000015"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:17.306600" elapsed="0.002199">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:17.309026" level="INFO">ℹ️ Não foi possível limpar tasks recentes</msg>
-<arg>ℹ️ Não foi possível limpar tasks recentes</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.308920" elapsed="0.000151"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:17.308840" elapsed="0.000261"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:17.306576" elapsed="0.002551"/>
-</try>
-<doc>Tenta resolver problemas comuns do System UI</doc>
-<status status="PASS" start="2025-11-03T01:02:17.300604" elapsed="0.008592"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<msg time="2025-11-03T01:02:22.309532" level="INFO">Slept 5 seconds.</msg>
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2025-11-03T01:02:17.309293" elapsed="5.000387"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:17.296725" elapsed="5.013024"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Tentativa ${i+1} falhou, tentando novamente...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.310007" elapsed="0.000029"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>3s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.310150" elapsed="0.000043"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:22.309818" elapsed="0.000408"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:17.296700" elapsed="5.013560"/>
-</try>
-<var name="${i}">0</var>
-<status status="PASS" start="2025-11-03T01:02:17.296672" elapsed="5.013617"/>
-</iter>
-<iter>
-<try>
-<branch type="TRY">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:22.311610" level="INFO">Tentativa 2 de 3 para estabilizar System UI</msg>
-<arg>Tentativa ${i+1} de ${retry_count} para estabilizar System UI</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.310768" elapsed="0.000905"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:22.312496" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.312347" elapsed="0.000342">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:22.313768" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.313911" level="FAIL">No application is open</msg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Waits until the element specified by the ``locator`` appears on the current page.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.311973" elapsed="0.002120">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:22.314254" level="INFO">${result} = False</msg>
-<var>${result}</var>
-<arg>Wait Until Page Contains Element</arg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.311823" elapsed="0.002455"/>
-</kw>
-<if>
-<branch type="IF" condition="${result}">
-<kw name="Log" owner="BuiltIn">
-<arg>✅ System UI estável na tentativa ${i+1}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.314515" elapsed="0.000019"/>
-</kw>
-<return>
-<status status="NOT RUN" start="2025-11-03T01:02:22.314576" elapsed="0.000016"/>
-</return>
-<status status="NOT RUN" start="2025-11-03T01:02:22.314364" elapsed="0.000249"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:22.314340" elapsed="0.000291"/>
-</if>
-<kw name="Handle System UI Issues" owner="stability">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:22.315361" level="INFO">🔧 Tentando resolver problemas do System UI...</msg>
-<arg>🔧 Tentando resolver problemas do System UI...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.315268" elapsed="0.000138"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Get Webelements" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:22.315861" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.315729" elapsed="0.000279">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:22.317106" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.317255" level="FAIL">No application is open</msg>
-<var>${anr_elements}</var>
-<arg>xpath=//*[contains(@text, 'isn't responding') or contains(@text, 'not responding')]</arg>
-<doc>Returns a list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.315564" elapsed="0.001853">No application is open</status>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Log" owner="BuiltIn">
-<arg>🚫 Dialog ANR detectado, tentando fechar...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.317759" elapsed="0.000037"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<var>${wait_btn}</var>
-<arg>Click Element</arg>
-<arg>xpath=//*[contains(@text, 'Wait') or contains(@text, 'Aguardar')]</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.317924" elapsed="0.000017"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${wait_btn}">
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//*[contains(@text, 'OK') or contains(@text, 'Close') or contains(@text, 'Fechar')]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.318093" elapsed="0.000017"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:22.318007" elapsed="0.000131"/>
-</branch>
-<status status="NOT RUN" start="2025-11-03T01:02:22.317991" elapsed="0.000183"/>
-</if>
-<var name="${element}"/>
-<status status="NOT RUN" start="2025-11-03T01:02:22.317656" elapsed="0.000552"/>
-</iter>
-<var>${element}</var>
-<value>@{anr_elements}</value>
-<status status="NOT RUN" start="2025-11-03T01:02:22.317521" elapsed="0.000709"/>
-</for>
-<status status="FAIL" start="2025-11-03T01:02:22.315481" elapsed="0.002856">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:22.318601" level="INFO">ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</msg>
-<arg>ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.318494" elapsed="0.000151"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:22.318401" elapsed="0.000275"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:22.315452" elapsed="0.003251"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:22.319152" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.319026" elapsed="0.000318">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:22.320353" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.320479" level="FAIL">No application is open</msg>
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.318842" elapsed="0.001793">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.320796" elapsed="0.000023"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:22.318760" elapsed="0.002110">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:22.321094" level="INFO">⚠️ Não foi possível pressionar HOME</msg>
-<arg>⚠️ Não foi possível pressionar HOME</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.320993" elapsed="0.000144"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:22.320912" elapsed="0.000272"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:22.318736" elapsed="0.002476"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:22.321810" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.321533" elapsed="0.000415">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:22.322943" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.323069" level="FAIL">No application is open</msg>
-<arg>187</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:22.321349" elapsed="0.001885">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>1s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.323393" elapsed="0.000022"/>
-</kw>
-<kw name="Press Keycode" owner="AppiumLibrary">
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.323501" elapsed="0.000016"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:22.323594" elapsed="0.000015"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:22.321269" elapsed="0.002384">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:22.323876" level="INFO">ℹ️ Não foi possível limpar tasks recentes</msg>
-<arg>ℹ️ Não foi possível limpar tasks recentes</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.323775" elapsed="0.000145"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:22.323693" elapsed="0.000256"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:22.321245" elapsed="0.002730"/>
-</try>
-<doc>Tenta resolver problemas comuns do System UI</doc>
-<status status="PASS" start="2025-11-03T01:02:22.314999" elapsed="0.009024"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<msg time="2025-11-03T01:02:27.324365" level="INFO">Slept 5 seconds.</msg>
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2025-11-03T01:02:22.324109" elapsed="5.000401"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:22.310668" elapsed="5.013908"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Tentativa ${i+1} falhou, tentando novamente...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.324846" elapsed="0.000029"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>3s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.324983" elapsed="0.000020"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:27.324645" elapsed="0.000389"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:22.310640" elapsed="5.014428"/>
-</try>
-<var name="${i}">1</var>
-<status status="PASS" start="2025-11-03T01:02:22.310601" elapsed="5.014494"/>
-</iter>
-<iter>
-<try>
-<branch type="TRY">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:27.326226" level="INFO">Tentativa 3 de 3 para estabilizar System UI</msg>
-<arg>Tentativa ${i+1} de ${retry_count} para estabilizar System UI</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.325626" elapsed="0.000656"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<kw name="Wait Until Page Contains Element" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:27.327073" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.326916" elapsed="0.000367">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:27.328357" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.328519" level="FAIL">No application is open</msg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Waits until the element specified by the ``locator`` appears on the current page.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.326552" elapsed="0.002120">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:27.328782" level="INFO">${result} = False</msg>
-<var>${result}</var>
-<arg>Wait Until Page Contains Element</arg>
-<arg>id=android:id/content</arg>
-<arg>timeout=${timeout}</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.326412" elapsed="0.002393"/>
-</kw>
-<if>
-<branch type="IF" condition="${result}">
-<kw name="Log" owner="BuiltIn">
-<arg>✅ System UI estável na tentativa ${i+1}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.329048" elapsed="0.000019"/>
-</kw>
-<return>
-<status status="NOT RUN" start="2025-11-03T01:02:27.329110" elapsed="0.000015"/>
-</return>
-<status status="NOT RUN" start="2025-11-03T01:02:27.328888" elapsed="0.000258"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:27.328865" elapsed="0.000316"/>
-</if>
-<kw name="Handle System UI Issues" owner="stability">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:27.329900" level="INFO">🔧 Tentando resolver problemas do System UI...</msg>
-<arg>🔧 Tentando resolver problemas do System UI...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.329808" elapsed="0.000135"/>
-</kw>
-<try>
-<branch type="TRY">
-<kw name="Get Webelements" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:27.330481" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.330350" elapsed="0.000273">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:27.331651" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.331799" level="FAIL">No application is open</msg>
-<var>${anr_elements}</var>
-<arg>xpath=//*[contains(@text, 'isn't responding') or contains(@text, 'not responding')]</arg>
-<doc>Returns a list of [http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.remote.webelement|WebElement] objects matching ``locator``.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.330149" elapsed="0.001785">No application is open</status>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Log" owner="BuiltIn">
-<arg>🚫 Dialog ANR detectado, tentando fechar...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332229" elapsed="0.000023"/>
-</kw>
-<kw name="Run Keyword And Return Status" owner="BuiltIn">
-<var>${wait_btn}</var>
-<arg>Click Element</arg>
-<arg>xpath=//*[contains(@text, 'Wait') or contains(@text, 'Aguardar')]</arg>
-<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332355" elapsed="0.000017"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${wait_btn}">
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//*[contains(@text, 'OK') or contains(@text, 'Close') or contains(@text, 'Fechar')]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332522" elapsed="0.000015"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332436" elapsed="0.000129"/>
-</branch>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332419" elapsed="0.000167"/>
-</if>
-<var name="${element}"/>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332114" elapsed="0.000492"/>
-</iter>
-<var>${element}</var>
-<value>@{anr_elements}</value>
-<status status="NOT RUN" start="2025-11-03T01:02:27.332006" elapsed="0.000622"/>
-</for>
-<status status="FAIL" start="2025-11-03T01:02:27.330060" elapsed="0.002624">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:27.332917" level="INFO">ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</msg>
-<arg>ℹ️ Nenhum dialog ANR encontrado ou erro ao processar</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.332807" elapsed="0.000153"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:27.332726" elapsed="0.000262"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:27.330030" elapsed="0.002982"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:27.334340" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.333328" elapsed="0.001166">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:27.335604" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.335749" level="FAIL">No application is open</msg>
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.333141" elapsed="0.002743">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.336014" elapsed="0.000022"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:27.333067" elapsed="0.003018">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:27.336325" level="INFO">⚠️ Não foi possível pressionar HOME</msg>
-<arg>⚠️ Não foi possível pressionar HOME</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.336224" elapsed="0.000145"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:27.336127" elapsed="0.000271"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:27.333044" elapsed="0.003380"/>
-</try>
-<try>
-<branch type="TRY">
-<kw name="Press Keycode" owner="AppiumLibrary">
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:27.336856" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.336736" elapsed="0.000251">No application is open</status>
-</kw>
-<msg time="2025-11-03T01:02:27.337997" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.338133" level="FAIL">No application is open</msg>
-<arg>187</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="FAIL" start="2025-11-03T01:02:27.336564" elapsed="0.001733">No application is open</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>1s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.338454" elapsed="0.000023"/>
-</kw>
-<kw name="Press Keycode" owner="AppiumLibrary">
-<arg>3</arg>
-<doc>Sends a press of ``keycode`` to the device.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.338564" elapsed="0.000016"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>2s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:27.338657" elapsed="0.000016"/>
-</kw>
-<status status="FAIL" start="2025-11-03T01:02:27.336483" elapsed="0.002234">No application is open</status>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:27.338936" level="INFO">ℹ️ Não foi possível limpar tasks recentes</msg>
-<arg>ℹ️ Não foi possível limpar tasks recentes</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.338835" elapsed="0.000147"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:27.338758" elapsed="0.000254"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:27.336459" elapsed="0.002580"/>
-</try>
-<doc>Tenta resolver problemas comuns do System UI</doc>
-<status status="PASS" start="2025-11-03T01:02:27.329559" elapsed="0.009530"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<msg time="2025-11-03T01:02:32.339449" level="INFO">Slept 5 seconds.</msg>
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="PASS" start="2025-11-03T01:02:27.339209" elapsed="5.000384"/>
-</kw>
-<status status="PASS" start="2025-11-03T01:02:27.325514" elapsed="5.014146"/>
-</branch>
-<branch type="EXCEPT">
-<kw name="Log" owner="BuiltIn">
-<arg>⚠️ Tentativa ${i+1} falhou, tentando novamente...</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.339917" elapsed="0.000028"/>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>3s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.340054" elapsed="0.000020"/>
-</kw>
-<status status="NOT RUN" start="2025-11-03T01:02:32.339725" elapsed="0.000382"/>
-</branch>
-<status status="PASS" start="2025-11-03T01:02:27.325482" elapsed="5.014656"/>
-</try>
-<var name="${i}">2</var>
-<status status="PASS" start="2025-11-03T01:02:27.325443" elapsed="5.014757"/>
-</iter>
-<var>${i}</var>
-<value>${retry_count}</value>
-<status status="PASS" start="2025-11-03T01:02:17.296414" elapsed="15.043877"/>
-</for>
-<kw name="Fail" owner="BuiltIn">
-<msg time="2025-11-03T01:02:32.340798" level="FAIL">❌ System UI não se estabilizou após 3 tentativas</msg>
-<arg>❌ System UI não se estabilizou após ${retry_count} tentativas</arg>
-<doc>Fails the test with the given message and optionally alters its tags.</doc>
-<status status="FAIL" start="2025-11-03T01:02:32.340422" elapsed="0.000463">❌ System UI não se estabilizou após 3 tentativas</status>
-</kw>
-<doc>Aguarda o System UI se estabilizar e resolve problemas comuns</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.296191" elapsed="15.044830">❌ System UI não se estabilizou após 3 tentativas</status>
-</kw>
-<kw name="Log" owner="BuiltIn">
-<arg>✅ Ambiente anti-ANR configurado</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.341176" elapsed="0.000025"/>
-</kw>
-<doc>Configura o ambiente para evitar ANRs (chamado antes dos testes)</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.280898" elapsed="15.060395">❌ System UI não se estabilizou após 3 tentativas</status>
-</kw>
-<kw name="Sleep" owner="BuiltIn">
-<arg>5s</arg>
-<doc>Pauses the test executed for the given time.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.341406" elapsed="0.000020"/>
+<status status="PASS" start="2025-11-03T01:19:48.918672" elapsed="0.000229"/>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
+<kw name="Capture Page Screenshot" owner="AppiumLibrary">
+<msg time="2025-11-03T01:20:10.163004" level="FAIL">No application is open</msg>
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<status status="FAIL" start="2025-11-03T01:20:10.162697" elapsed="0.000593">No application is open</status>
+</kw>
+<msg time="2025-11-03T01:20:10.164521" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:20:10.164778" level="FAIL">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:435)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:293)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:267)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:250)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:266)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1294)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:366)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:911)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:131)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:611)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:552)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more
+</msg>
 <arg>http://localhost:4723</arg>
 <arg>platformName=Android</arg>
 <arg>automationName=UIAutomator2</arg>
@@ -1718,51 +335,148 @@ Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.341529" elapsed="0.000018"/>
-</kw>
-<kw name="Wait For App Stability" owner="stability">
-<arg>com.wdiodemoapp</arg>
-<arg>30s</arg>
-<doc>Aguarda o aplicativo se estabilizar após o launch</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.341830" elapsed="0.000028"/>
+<status status="FAIL" start="2025-11-03T01:19:48.919073" elapsed="21.245959">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
+    [ Message content over the limit has been removed. ]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more</status>
 </kw>
 <kw name="Log" owner="BuiltIn">
-<arg>✅ Sessão Appium iniciada com sucesso e app estabilizado</arg>
+<arg>✅ Sessão Appium conectada, aguardando estabilização...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="NOT RUN" start="2025-11-03T01:02:32.341966" elapsed="0.000019"/>
+<status status="NOT RUN" start="2025-11-03T01:20:10.165361" elapsed="0.000029"/>
 </kw>
-<status status="FAIL" start="2025-11-03T01:02:17.280535" elapsed="15.061535">❌ System UI não se estabilizou após 3 tentativas</status>
+<kw name="Sleep" owner="BuiltIn">
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2025-11-03T01:20:10.165501" elapsed="0.000020"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For App Stability" owner="stability">
+<arg>com.wdiodemoapp</arg>
+<arg>15s</arg>
+<doc>Aguarda o aplicativo se estabilizar após o launch</doc>
+<status status="NOT RUN" start="2025-11-03T01:20:10.165870" elapsed="0.000031"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>✅ App estabilizado com sucesso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:20:10.166011" elapsed="0.000020"/>
+</kw>
+<status status="NOT RUN" start="2025-11-03T01:20:10.165618" elapsed="0.000444"/>
+</branch>
+<branch type="EXCEPT" assign="${error}">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Aviso: App pode não estar completamente estável: ${error}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:20:10.166189" elapsed="0.000019"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>ℹ️ Continuando execução mesmo assim...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:20:10.166337" elapsed="0.000020"/>
+</kw>
+<status status="NOT RUN" start="2025-11-03T01:20:10.166103" elapsed="0.000285"/>
+</branch>
+<status status="NOT RUN" start="2025-11-03T01:20:10.165572" elapsed="0.000844"/>
+</try>
+<kw name="Log" owner="BuiltIn">
+<arg>✅ Sessão pronta para uso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-03T01:20:10.166502" elapsed="0.000019"/>
+</kw>
+<status status="FAIL" start="2025-11-03T01:19:48.918260" elapsed="21.248399">SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
+    [ Message content over the limit has been removed. ]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more</status>
 </kw>
 <kw name="Finish session" owner="base" type="TEARDOWN">
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-11-03T01:02:32.342735" level="INFO">🔚 Finalizando sessão...</msg>
+<msg time="2025-11-03T01:20:10.167403" level="INFO">🔚 Finalizando sessão...</msg>
 <arg>🔚 Finalizando sessão...</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-11-03T01:02:32.342635" elapsed="0.000149"/>
+<status status="PASS" start="2025-11-03T01:20:10.167279" elapsed="0.000178"/>
 </kw>
 <kw name="Close Application" owner="AppiumLibrary">
 <kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2025-11-03T01:02:32.343194" level="FAIL">No application is open</msg>
+<msg time="2025-11-03T01:20:10.168092" level="FAIL">No application is open</msg>
 <doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2025-11-03T01:02:32.343040" elapsed="0.000316">No application is open</status>
+<status status="FAIL" start="2025-11-03T01:20:10.167782" elapsed="0.000495">No application is open</status>
 </kw>
-<msg time="2025-11-03T01:02:32.344427" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:32.344602" level="FAIL">No application is open</msg>
+<msg time="2025-11-03T01:20:10.169446" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:20:10.169614" level="FAIL">No application is open</msg>
 <doc>Closes the current application and the webdriver session.</doc>
-<status status="FAIL" start="2025-11-03T01:02:32.342877" elapsed="0.001850">No application is open</status>
+<status status="FAIL" start="2025-11-03T01:20:10.167592" elapsed="0.002177">No application is open</status>
 </kw>
-<status status="FAIL" start="2025-11-03T01:02:32.342368" elapsed="0.002471">No application is open</status>
+<status status="FAIL" start="2025-11-03T01:20:10.166936" elapsed="0.002969">No application is open</status>
 </kw>
 <doc>Verifica se o usuário consegue realizar o login com sucesso na aplicação</doc>
-<status status="FAIL" start="2025-11-03T01:02:17.280046" elapsed="15.064848">Setup failed:
-❌ System UI não se estabilizou após 3 tentativas
+<status status="FAIL" start="2025-11-03T01:19:48.917338" elapsed="21.252621">Setup failed:
+SessionNotCreatedException: Message: A new session could not be created. Details: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.SessionNotCreatedException: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:60)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:259)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:253)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Abstra...
+    [ Message content over the limit has been removed. ]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:466)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:438)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:140)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:919)
+Caused by: io.appium.uiautomator2.common.exceptions.InvalidArgumentException: Invalid 'waitForIdleTimeout' setting value type. Got: java.lang.String. Expected: java.lang.Long.
+	at io.appium.uiautomator2.model.settings.AbstractSetting.convertValue(AbstractSetting.java:82)
+	at io.appium.uiautomator2.model.settings.AbstractSetting.update(AbstractSetting.java:36)
+	at io.appium.uiautomator2.model.Session.&lt;init&gt;(Session.java:47)
+	at io.appium.uiautomator2.model.AppiumUIA2Driver.initializeSession(AppiumUIA2Driver.java:42)
+	at io.appium.uiautomator2.handler.NewSession.safeHandle(NewSession.java:53)
+	... 34 more
 
 Also teardown failed:
 No application is open</status>
 </test>
-<status status="FAIL" start="2025-11-03T01:02:01.960693" elapsed="30.384786"/>
+<status status="FAIL" start="2025-11-03T01:19:21.072872" elapsed="49.097684"/>
 </suite>
-<status status="FAIL" start="2025-11-03T01:02:01.943199" elapsed="30.402852"/>
+<status status="FAIL" start="2025-11-03T01:19:21.043001" elapsed="49.128254"/>
 </suite>
 <statistics>
 <total>
@@ -1776,31 +490,9 @@ No application is open</status>
 </suite>
 </statistics>
 <errors>
-<msg time="2025-11-03T01:02:02.234809" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.238204" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.241368" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:02.243771" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.249265" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.252603" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.255638" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:07.258120" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.263911" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.267245" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.270310" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:12.272925" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.279311" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.299330" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.302665" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.305723" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:17.308156" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.313768" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.317106" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.320353" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:22.322943" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.328357" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.331651" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.335604" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:27.337997" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2025-11-03T01:02:32.344427" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:19:48.908452" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:19:48.916246" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:20:10.164521" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2025-11-03T01:20:10.169446" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
 </errors>
 </robot>
