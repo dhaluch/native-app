@@ -17,29 +17,21 @@ Start session
     ...    app=${EXECDIR}/app/wdio.native.app.apk
     ...    udid=emulator-5554
     ...    autoGrantPermissions=true
-    ...    appium:disableHiddenApiPolicy=false
-    ...    appium:ignoreHiddenApiPolicyError=true
-    ...    appium:skipDeviceInitialization=true
     ...    appPackage=com.wdiodemoapp
     ...    appActivity=.MainActivity
-    ...    newCommandTimeout=600
-    ...    adbExecTimeout=200000
-    ...    uiautomator2ServerInstallTimeout=180000
-    ...    uiautomator2ServerLaunchTimeout=180000
+    ...    newCommandTimeout=${600}
+    ...    adbExecTimeout=${200000}
+    ...    uiautomator2ServerInstallTimeout=${180000}
+    ...    uiautomator2ServerLaunchTimeout=${180000}
     ...    noReset=true
-    ...    appium:skipServerInstallation=false
-    ...    appium:uiautomator2ServerReadTimeout=240000
-    ...    appium:waitForIdleTimeout=10000
-    ...    appium:waitForQuiescence=true
-    ...    appium:waitActivity=.MainActivity
-    ...    appium:waitDuration=30000
-    ...    appium:androidInstallTimeout=180000
-    ...    appium:systemPort=8200
-    ...    appium:clearSystemFiles=true
-    ...    appium:ensureWebviewsHavePages=false
-    ...    appium:nativeWebScreenshot=true
-    ...    appium:reconnectRetries=3
-    ...    appium:maxTypingFrequency=60
+    ...    appium:disableHiddenApiPolicy=${false}
+    ...    appium:ignoreHiddenApiPolicyError=${true}
+    ...    appium:skipDeviceInitialization=${true}
+    ...    appium:skipServerInstallation=${false}
+    ...    appium:systemPort=${8200}
+    ...    appium:clearSystemFiles=${true}
+    ...    appium:ensureWebviewsHavePages=${false}
+    ...    appium:nativeWebScreenshot=${true}
     
     Log    ✅ Sessão Appium conectada, aguardando estabilização...
     
