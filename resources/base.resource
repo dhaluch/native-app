@@ -8,6 +8,9 @@ Resource    stability.resource
 
 *** Keywords ***
 Start session
+    [Documentation]    Abre uma sessão Appium no emulador Android (udid=emulator-5554) e inicia o app Demo (MainActivity).
+    ...    Pré‑requisitos: Appium server ativo em http://localhost:4723 e dispositivo pronto.
+    ...    Efeitos: App aberto e estável para interação; permissões concedidas automaticamente.
     Log    🚀 Iniciando sessão Appium...
     
     Open Application    http://localhost:4723
@@ -50,5 +53,6 @@ Start session
     Log    ✅ Sessão pronta para uso
 
 Finish session
+    [Documentation]    Encerra a sessão Appium caso esteja aberta e finaliza a execução do app.
     Log    🔚 Finalizando sessão...
     Close Application

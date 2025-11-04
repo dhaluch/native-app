@@ -21,136 +21,263 @@ Versões utilizadas (recomendações)
 ----------------------------------
 - Python: 3.10
 - Node.js: 18.x
-- Robot Framework: latest compatível com Python 3.10 (instalado via pip)
-- Robot Framework AppiumLibrary
-- Appium: 2.x (instalado via npm no workflow)
-- Appium driver: uiautomator2 (v4.x, instalado no workflow)
-- Android SDK: API 29 (emulador configurado no workflow)
+# 🤖 Robot Mobile - Android (Outsera)
 
-Dependências (como instalar)
-----------------------------
-Local (Linux/macOS) - ambiente de desenvolvimento:
+Automação de testes Mobile (Android) com Robot Framework + Appium, com execução local e no GitHub Actions, e publicação dos relatórios (report/log) no GitHub Pages.
 
-1. Instale Python 3.10 e Node 18.
-2. Instale pip packages:
+[![Robot Tests](https://github.com/dhaluch/native-app/actions/workflows/robot-tests.yml/badge.svg)](https://github.com/dhaluch/native-app/actions/workflows/robot-tests.yml)
 
-```bash
+---
+
+## 📋 Índice
+
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Tecnologias](#tecnologias)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação](#instalação)
+- [Configuração](#configuração)
+- [Executando os Testes](#executando-os-testes)
+- [Relatórios (Robot HTML)](#relatórios-robot-html)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Troubleshooting](#troubleshooting)
+- [Contribuindo](#contribuindo)
+- [Scripts úteis](#scripts-úteis)
+
+---
+
+## 🎯 Sobre o Projeto
+
+Este projeto automatiza cenários de UI no app de demonstração (APK em `app/wdio.native.app.apk`) usando Robot Framework + Appium/UIAutomator2.
+
+Cenários principais:
+- ✅ Login com sucesso
+- ✅ Cadastro (Sign up) com sucesso
+- ✅ Navegação Home/Login
+
+Geração de relatórios padrão do Robot:
+- 📄 `report.html` e `log.html`
+- 🧾 `output.xml`
+
+---
+
+## 🛠️ Tecnologias
+
+- Robot Framework (tests)
+- AppiumLibrary (integração Appium)
+- Appium 2.x + UIAutomator2 driver
+- Android SDK/Emulador (API 29 no CI)
+- GitHub Actions (CI/CD)
+- GitHub Pages (publicação de relatórios)
+
+---
+
+## 📋 Pré-requisitos
+
+- Python 3.10+ (CI usa 3.10)
+- Node.js 18+
+- Android SDK + Platform Tools (adb)
+- Emulador Android criado (ou dispositivo físico)
+
+---
+
+## 🚀 Instalação
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-pip install robotframework
-pip install robotframework-appiumlibrary
-# Se usar Robot Browser/Playwright (não obrigatório para mobile):
-# pip install robotframework-browser
-# rfbrowser init
-```
+pip install robotframework robotframework-appiumlibrary
 
-3. Instale Appium (se for executar localmente):
-
-```bash
 npm install -g appium
-appium driver install uiautomator2@4.0.1
+appium driver install uiautomator2
 ```
 
-4. Configure Android SDK / emulator (ex.: via Android Studio SDK Manager).
-
-Como executar os testes (local)
-------------------------------
-1. Verifique que o emulador Android esteja criado e rodando (ou dispositivo conectado). Exemplo com AVD "test":
+Linux/macOS:
 
 ```bash
-# iniciar emulador (exemplo)
-$ANDROID_SDK_ROOT/emulator/emulator -avd test &
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install robotframework robotframework-appiumlibrary
+
+npm install -g appium
+appium driver install uiautomator2
+```
+
+---
+
+## ⚙️ Configuração
+
+- APK alvo em `app/wdio.native.app.apk`
+- Capabilities configuradas em `resources/base.resource` (keyword `Start session`)
+- Endereço do Appium: `http://localhost:4723`
+- UDID padrão do emulador: `emulator-5554` (ajuste se necessário)
+
+> Nota: para evitar o erro de tipo em `waitForIdleTimeout`, não definimos essa capability como string. Se quiser ajustar após abrir a sessão, use um setting numérico com `Set Appium Setting`.
+
+---
+
+## 🧪 Executando os Testes
+
+Inicie o emulador e o Appium, depois rode o Robot.
+
+Windows PowerShell:
+
+```powershell
+# Emulador (exemplo)
+Start-Process -NoNewWindow -FilePath "$Env:ANDROID_HOME\emulator\emulator.exe" -ArgumentList '-avd','test','-no-window','-no-audio'
+& "$Env:ANDROID_HOME\platform-tools\adb.exe" wait-for-device
+
+# Appium server
+Start-Process -NoNewWindow -FilePath "appium"
+
+# Tests
+mkdir logs
+robot --outputdir logs tests
+Start-Process .\logs\report.html
+```
+
+Linux/macOS:
+
+```bash
+$ANDROID_HOME/emulator/emulator -avd test -no-window -no-audio &
 adb wait-for-device
-```
 
-2. Instale o APK no emulador (opcional — o workflow instala automaticamente):
-
-```bash
-adb install -r app/wdio.native.app.apk
-```
-
-3. Inicie o Appium server (se estiver rodando os testes localmente):
-
-```bash
 appium &
+
+mkdir -p logs
+robot --outputdir logs tests
+xdg-open logs/report.html || open logs/report.html
 ```
 
-4. Execute os testes Robot Framework:
+---
+
+## 📊 Relatórios (Robot HTML)
+
+Após a execução, consulte em `logs/`:
+- `report.html`
+- `log.html`
+- `output.xml`
+
+No CI, os relatórios são publicados no GitHub Pages:
+
+```
+https://dhaluch.github.io/native-app/
+```
+
+> O publish usa `peaceiris/actions-gh-pages@v3` e requer um secret `GH_PAGES_PAT` (token classic com scope `repo`). A estrutura mantém histórico por branch/data.
+
+---
+
+## 🔄 CI/CD Pipeline
+
+Workflow principal: `.github/workflows/robot-tests.yml`
+
+Disparos:
+- ✅ Push para `feature/**`
+- ✅ Pull Requests para `main`
+- ✅ Execução manual (`workflow_dispatch`)
+
+Etapas principais:
+1. Checkout do código
+2. Setup Python 3.10 e dependências Robot
+3. Setup Android SDK + criação do AVD (API 29)
+4. Start do emulador em modo headless, aguardo de boot e estabilização
+5. Instalação do APK e start do Appium server
+6. Execução do Robot: `robot --outputdir logs tests`
+7. Upload do artifact `logs/`
+8. Deploy dos relatórios no Pages (job `publish-gh-pages`)
+
+Secrets necessários (para Pages via PAT):
+- `GH_PAGES_PAT` – token (classic) com escopo `repo`
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+native-app/
+├── app/
+│   └── wdio.native.app.apk
+├── resources/
+│   ├── base.resource                # sessão Appium (setup/teardown)
+│   └── screens/
+│       ├── home.resource            # keywords da Home
+│       └── login.resource           # keywords de Login
+├── tests/
+│   ├── Login.robot
+│   └── primeiroteste.robot
+├── logs/                            # (gerado) relatórios Robot
+├── .github/
+│   └── workflows/
+│       └── robot-tests.yml          # pipeline Android + publish Pages
+└── README.md
+```
+
+---
+
+## 🔍 Troubleshooting
+
+Para problemas comuns (emulador, Appium, Pages, timeouts), consulte o **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)**.
+
+Tópicos cobertos:
+- ❌ "System UI isn't responding" / ANR — como mitigamos no CI
+- ❌ SessionNotCreatedException: `waitForIdleTimeout` (tipo inválido)
+- ❌ Emulador não pronto (boot/property checks com `adb`)
+- ❌ Publicação no Pages (PAT, action `peaceiris`)
+
+Docs relacionados:
+- `CORRECAO_SYSTEM_UI.md`, `CORRECAO_GHPAGES.md`, `CORRECAO_SETUP_FAILED.md`, `GITHUB_PAGES_SETUP.md`
+
+---
+
+## 🤝 Contribuindo
+
+1. Faça um fork
+2. Crie uma branch: `git checkout -b feature/minha-feature`
+3. Commit: `git commit -m "Add: minha nova feature"`
+4. Push: `git push origin feature/minha-feature`
+5. Abra um Pull Request
+
+Padrões sugeridos:
+- `Add:` nova funcionalidade
+- `Fix:` correção de bug
+- `Update:` atualização de código existente
+- `Refactor:` refatoração
+- `Docs:` documentação
+- `Test:` testes
+
+---
+
+## 📝 Scripts úteis
+
+```powershell
+# Windows: criar venv e instalar deps
+python -m venv .venv; .\.venv\Scripts\Activate.ps1; python -m pip install --upgrade pip; pip install robotframework robotframework-appiumlibrary
+
+# Appium 2 + driver
+npm install -g appium; appium driver install uiautomator2
+
+# Rodar testes
+robot --outputdir logs tests
+```
 
 ```bash
-robot --outputdir logs tests/
+# Linux/macOS
+python -m venv .venv && source .venv/bin/activate && python -m pip install --upgrade pip && pip install robotframework robotframework-appiumlibrary
+npm install -g appium && appium driver install uiautomator2
+robot --outputdir logs tests
 ```
 
-Após a execução, os relatórios estarão em `logs/` (`report.html`, `log.html`, `output.xml`).
+---
 
-Windows (PowerShell)
---------------------
-Se estiver em um ambiente Windows com PowerShell, use os comandos abaixo (assumindo que `ANDROID_SDK_ROOT`, `python` e `npm` estejam no PATH):
+## 📄 Licença
 
-1. Iniciar o emulador (exemplo):
+Projeto com finalidade educacional/demonstrativa.
 
-```powershell
-# Inicia o AVD chamado 'test' em background
-Start-Process -NoNewWindow -FilePath "$Env:ANDROID_SDK_ROOT\emulator\emulator.exe" -ArgumentList '-avd','test','-no-window','-no-audio'
-& "$Env:ANDROID_SDK_ROOT\platform-tools\adb.exe" wait-for-device
-```
+---
 
-2. Instalar o APK no emulador:
-
-```powershell
-& "$Env:ANDROID_SDK_ROOT\platform-tools\adb.exe" install -r "app\wdio.native.app.apk"
-```
-
-3. Iniciar o Appium server (se instalado globalmente via npm):
-
-```powershell
-# Se Appium estiver no PATH
-Start-Process -NoNewWindow -FilePath "appium" -ArgumentList ''
-# Ou, se preferir usar npx
-npx appium &
-```
-
-4. Executar os testes Robot Framework:
-
-```powershell
-robot --outputdir logs tests/
-```
-
-Notas:
-- Em PowerShell, `Start-Process` inicia um processo em background. Use `Get-Process` e `Stop-Process` para gerenciar.
-- Execute o PowerShell com permissões adequadas se necessário.
-
-Como executar no GitHub Actions (CI)
------------------------------------
-O workflow principal está em `.github/workflows/robot-tests.yml`. Ele:
-- Configura o Android SDK e cria um emulador (API 29 por padrão).
-- Instala o APK (`app/wdio.native.app.apk`) no emulador.
-- Instala e inicia o Appium com o driver `uiautomator2`.
-- Executa os testes com Robot Framework e salva os logs em `logs/`.
-- Faz upload dos artefatos (artifact `logs/`) para download via UI do Actions.
-
-Para rodar o workflow manualmente: vá na aba "Actions" do repositório e dispare o workflow (ou faça push para branch configurada).
-
-Observações sobre relatórios
----------------------------
-- O workflow faz `robot --outputdir logs tests/` e depois faz upload dos arquivos de `logs/` como artefato. Baixe o ZIP do artifact pela interface do GitHub Actions para ver `report.html` e `log.html`.
-
-Configurações importantes / Capabilities
----------------------------------------
-O arquivo `resources/base.resource` contém a keyword `Start session` onde as capabilities Appium são definidas. Campos chave:
-
-- `platformName=Android`
-- `automationName=UIAutomator2`
-- `deviceName=Android Emulator`
-- `udid=emulator-5554` (remova/ajuste se seu emulador tiver outro id)
-- `app=${EXECDIR}/app/wdio.native.app.apk`
-- `appPackage` e `appActivity` do APK (`com.wdiodemoapp` / `.MainActivity` no projeto)
-- `newCommandTimeout` aumentado para 600s (tolerância a inicialização lenta)
-
-Dicas e solução de problemas
----------------------------
-- Erro "Could not find a connected Android device": verifique se o emulador está rodando e `adb devices` lista uma instância.
-- Erro de driver Appium para UIAutomator2: instale o driver com `appium driver install uiautomator2`.
-
-Próximos passos recomendados
----------------------------
-- Validar localmente a instalação do APK e se o id da activity/package batem com as capabilities.
+**Última atualização:** 2025-11-03

@@ -20,7 +20,9 @@ ${LOGIN_ACCES_FORM}              (//android.widget.TextView[@text="Login"])[1]
 ${Mensagem_Sucesso_Login}         Success
 *** Keywords ***
 Realizar Login com sucesso
-    [Documentation]    Preenche o formulário de login e realiza o login com sucesso
+    [Documentation]    Realiza login com credenciais válidas e valida o sucesso ("Success").
+    ...    Passos: preenche e-mail e senha, clica em LOGIN, aguarda confirmação e fecha o diálogo.
+    ...    Observação: usa valores estáticos de exemplo; ajuste se necessário.
     Input Text                   accessibility_id=${INPUT_EMAIL}                   teste@gmail.com
     Input Text                   accessibility_id=${INPUT_PASSWORD}                Senha@123456
     Click Element                xpath=${BTN_LOGIN}
@@ -29,7 +31,8 @@ Realizar Login com sucesso
 
 
 Preenche Sign Up Form
-    [Documentation]    Preenche o formulário de cadastro e realiza o cadastro com sucesso
+    [Documentation]    Cadastra um novo usuário preenchendo e-mail, senha e confirmação; valida mensagem "Signed Up!".
+    ...    Passos: abre aba Sign up, preenche campos, envia, aguarda confirmação e fecha o diálogo.
     Wait Until Page Contains    Login / Sign up Form                                timeout=120s
     Click Element                xpath=${SIGN_UP}
     Input Text                   accessibility_id=${INPUT_EMAIL}                   teste@gmail.com
@@ -41,11 +44,11 @@ Preenche Sign Up Form
     
         
 Click Login acima do formulario
-    [Documentation]    Clica no botão de login acima do formulário
+    [Documentation]    Alterna para a aba "Login" acima do formulário de autenticação.
     Click Element                xpath=${LOGIN_ACCES_FORM}
 
 
 Limpa os Campos de Login
-    [Documentation]    Limpa os campos de email e senha no formulário de login
+    [Documentation]    Limpa os campos de e-mail e senha no formulário de login (reset do estado da tela).
     Clear Text    accessibility_id=${INPUT_EMAIL}
     Clear Text    accessibility_id=${INPUT_PASSWORD}         
