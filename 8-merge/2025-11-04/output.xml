@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.10.19 on linux)" generated="2025-11-04T02:56:05.772977" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="/home/runner/work/native-app/native-app/tests">
+<suite id="s1-s1" name="Login" source="/home/runner/work/native-app/native-app/tests/Login.robot">
+<test id="s1-s1-t1" name="Deve realizar o cadastro com sucesso" line="12">
+<kw name="Start session" owner="base" type="SETUP">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:06.022719" level="INFO">🚀 Iniciando sessão Appium...</msg>
+<arg>🚀 Iniciando sessão Appium...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:06.022588" elapsed="0.000199"/>
+</kw>
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://localhost:4723</arg>
+<arg>platformName=Android</arg>
+<arg>automationName=UIAutomator2</arg>
+<arg>deviceName=Android Emulator</arg>
+<arg>app=${EXECDIR}/app/wdio.native.app.apk</arg>
+<arg>udid=emulator-5554</arg>
+<arg>autoGrantPermissions=true</arg>
+<arg>appPackage=com.wdiodemoapp</arg>
+<arg>appActivity=.MainActivity</arg>
+<arg>newCommandTimeout=${600}</arg>
+<arg>adbExecTimeout=${200000}</arg>
+<arg>uiautomator2ServerInstallTimeout=${180000}</arg>
+<arg>uiautomator2ServerLaunchTimeout=${180000}</arg>
+<arg>noReset=true</arg>
+<arg>appium:disableHiddenApiPolicy=${false}</arg>
+<arg>appium:ignoreHiddenApiPolicyError=${true}</arg>
+<arg>appium:skipDeviceInitialization=${true}</arg>
+<arg>appium:skipServerInstallation=${false}</arg>
+<arg>appium:systemPort=${8200}</arg>
+<arg>appium:clearSystemFiles=${true}</arg>
+<arg>appium:ensureWebviewsHavePages=${false}</arg>
+<arg>appium:nativeWebScreenshot=${true}</arg>
+<doc>Opens a new application to the given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.19/guides/caps/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | No     | alias             |</doc>
+<status status="PASS" start="2025-11-04T02:56:06.022961" elapsed="29.293515"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:35.316973" level="INFO">✅ Sessão Appium conectada, aguardando estabilização...</msg>
+<arg>✅ Sessão Appium conectada, aguardando estabilização...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:35.316778" elapsed="0.000252"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-04T02:56:40.317434" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-04T02:56:35.317144" elapsed="5.000483"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For App Stability" owner="stability">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:40.319480" level="INFO">⏳ Aguardando estabilização do app com.wdiodemoapp...</msg>
+<arg>⏳ Aguardando estabilização do app ${package_name}...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:40.319200" elapsed="0.000368"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Page Should Contain Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:56:41.179053" level="INFO">Current page contains element 'id=android:id/content'.</msg>
+<msg time="2025-11-04T02:56:41.179185" level="INFO">criteria is android:id/content</msg>
+<arg>id=android:id/content</arg>
+<doc>Verifies that the current page contains the element with the ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:56:40.320357" elapsed="0.858919"/>
+</kw>
+<arg>${timeout}</arg>
+<arg>3s</arg>
+<arg>Page Should Contain Element</arg>
+<arg>id=android:id/content</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2025-11-04T02:56:40.319887" elapsed="0.859503"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:41.179890" level="INFO">✅ Elemento android:id/content encontrado</msg>
+<arg>✅ Elemento android:id/content encontrado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:41.179669" elapsed="0.000326"/>
+</kw>
+<status status="PASS" start="2025-11-04T02:56:40.319702" elapsed="0.860350"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Elemento android:id/content não encontrado, tentando continuar...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-04T02:56:41.180321" elapsed="0.000037"/>
+</kw>
+<status status="NOT RUN" start="2025-11-04T02:56:41.180141" elapsed="0.000272"/>
+</branch>
+<status status="PASS" start="2025-11-04T02:56:40.319647" elapsed="0.860815"/>
+</try>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-04T02:56:44.180988" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-04T02:56:41.180623" elapsed="3.000514"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:44.181626" level="INFO">✅ App com.wdiodemoapp considerado estabilizado</msg>
+<arg>✅ App ${package_name} considerado estabilizado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:44.181362" elapsed="0.000321"/>
+</kw>
+<arg>com.wdiodemoapp</arg>
+<arg>15s</arg>
+<doc>Aguarda o aplicativo se estabilizar após o launch</doc>
+<status status="PASS" start="2025-11-04T02:56:40.318460" elapsed="3.863304"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:44.182051" level="INFO">✅ App estabilizado com sucesso</msg>
+<arg>✅ App estabilizado com sucesso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:44.181930" elapsed="0.000171"/>
+</kw>
+<status status="PASS" start="2025-11-04T02:56:40.317878" elapsed="3.864260"/>
+</branch>
+<branch type="EXCEPT" assign="${error}">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Aviso: App pode não estar completamente estável: ${error}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-04T02:56:44.182308" elapsed="0.000021"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>ℹ️ Continuando execução mesmo assim...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-04T02:56:44.182432" elapsed="0.000020"/>
+</kw>
+<status status="NOT RUN" start="2025-11-04T02:56:44.182197" elapsed="0.000287"/>
+</branch>
+<status status="PASS" start="2025-11-04T02:56:40.317769" elapsed="3.864747"/>
+</try>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:56:44.182714" level="INFO">✅ Sessão pronta para uso</msg>
+<arg>✅ Sessão pronta para uso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:56:44.182611" elapsed="0.000150"/>
+</kw>
+<doc>Abre uma sessão Appium no emulador Android (udid=emulator-5554) e inicia o app Demo (MainActivity).
+Pré‑requisitos: Appium server ativo em http://localhost:4723 e dispositivo pronto.
+Efeitos: App aberto e estável para interação; permissões concedidas automaticamente.</doc>
+<status status="PASS" start="2025-11-04T02:56:06.021849" elapsed="38.160973"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>WEBDRIVER</arg>
+<arg>300s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-04T02:56:44.182972" elapsed="2.262819"/>
+</kw>
+<kw name="Click Login" owner="home">
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:56:46.449147" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="󰍂"]'.</msg>
+<msg time="2025-11-04T02:56:51.558211" level="INFO">xpath criteria: //android.widget.TextView[@text="󰍂"]</msg>
+<arg>${LOGIN}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:56:46.446794" elapsed="5.111574"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${TEXTO_TELA_LOGIN}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-04T02:56:51.558674" elapsed="7.671781"/>
+</kw>
+<doc>Abre a tela de Login a partir da Home e valida o carregamento do formulário.</doc>
+<status status="PASS" start="2025-11-04T02:56:46.446252" elapsed="12.784335"/>
+</kw>
+<kw name="Preenche Sign Up Form" owner="login">
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>Login / Sign up Form</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-04T02:56:59.231272" elapsed="1.656465"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:00.889551" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="Sign up"]'.</msg>
+<msg time="2025-11-04T02:57:02.504358" level="INFO">xpath criteria: //android.widget.TextView[@text="Sign up"]</msg>
+<arg>xpath=${SIGN_UP}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:00.888097" elapsed="1.616389"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:02.506177" level="INFO">Typing text 'teste@gmail.com' into text field 'accessibility_id=input-email'</msg>
+<arg>accessibility_id=${INPUT_EMAIL}</arg>
+<arg>teste@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:02.504698" elapsed="1.777177"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:04.283670" level="INFO">Typing text 'Senha@123456' into text field 'accessibility_id=input-password'</msg>
+<arg>accessibility_id=${INPUT_PASSWORD}</arg>
+<arg>Senha@123456</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:04.282192" elapsed="1.630807"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:05.914974" level="INFO">Typing text 'Senha@123456' into text field 'accessibility_id=input-repeat-password'</msg>
+<arg>accessibility_id=${INPUT_CONFIRM_PASSWORD}</arg>
+<arg>Senha@123456</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:05.913255" elapsed="1.378372"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:07.293321" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="button-SIGN UP"]/android.view.ViewGroup'.</msg>
+<msg time="2025-11-04T02:57:08.746756" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="button-SIGN UP"]/android.view.ViewGroup</msg>
+<arg>xpath=${BTN_SIGN_UP}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:07.291891" elapsed="1.454990"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${Mensagem_Sucesso_Cadastro}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-04T02:57:08.747175" elapsed="8.217675"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:16.967700" level="INFO">Clicking element 'ID=android:id/button1'.</msg>
+<msg time="2025-11-04T02:57:17.286441" level="INFO">criteria is android:id/button1</msg>
+<arg>ID=${BTN_OK_SUCCESS}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:16.965218" elapsed="0.321337"/>
+</kw>
+<doc>Cadastra um novo usuário preenchendo e-mail, senha e confirmação; valida mensagem "Signed Up!".
+Passos: abre aba Sign up, preenche campos, envia, aguarda confirmação e fecha o diálogo.</doc>
+<status status="PASS" start="2025-11-04T02:56:59.230880" elapsed="18.055785"/>
+</kw>
+<kw name="Click Login acima do formulario" owner="login">
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:17.289520" level="INFO">Clicking element 'xpath=(//android.widget.TextView[@text="Login"])[1]'.</msg>
+<msg time="2025-11-04T02:57:19.216006" level="INFO">xpath criteria: (//android.widget.TextView[@text="Login"])[1]</msg>
+<arg>xpath=${LOGIN_ACCES_FORM}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:17.287485" elapsed="1.928635"/>
+</kw>
+<doc>Alterna para a aba "Login" acima do formulário de autenticação.</doc>
+<status status="PASS" start="2025-11-04T02:57:17.287012" elapsed="1.929214"/>
+</kw>
+<kw name="Finish session" owner="base" type="TEARDOWN">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:19.217254" level="INFO">🔚 Finalizando sessão...</msg>
+<arg>🔚 Finalizando sessão...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:19.217106" elapsed="0.000207"/>
+</kw>
+<kw name="Close Application" owner="AppiumLibrary">
+<doc>Closes the current application and the webdriver session.</doc>
+<status status="PASS" start="2025-11-04T02:57:19.217435" elapsed="3.484640"/>
+</kw>
+<doc>Encerra a sessão Appium caso esteja aberta e finaliza a execução do app.</doc>
+<status status="PASS" start="2025-11-04T02:57:19.216632" elapsed="3.485580"/>
+</kw>
+<doc>Verifica se o usuário consegue realizar o cadastro com sucesso na aplicação</doc>
+<status status="PASS" start="2025-11-04T02:56:06.020787" elapsed="76.681498"/>
+</test>
+<test id="s1-s1-t2" name="Deve realizar o login com sucesso" line="19">
+<kw name="Start session" owner="base" type="SETUP">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:22.704131" level="INFO">🚀 Iniciando sessão Appium...</msg>
+<arg>🚀 Iniciando sessão Appium...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:22.703993" elapsed="0.000197"/>
+</kw>
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://localhost:4723</arg>
+<arg>platformName=Android</arg>
+<arg>automationName=UIAutomator2</arg>
+<arg>deviceName=Android Emulator</arg>
+<arg>app=${EXECDIR}/app/wdio.native.app.apk</arg>
+<arg>udid=emulator-5554</arg>
+<arg>autoGrantPermissions=true</arg>
+<arg>appPackage=com.wdiodemoapp</arg>
+<arg>appActivity=.MainActivity</arg>
+<arg>newCommandTimeout=${600}</arg>
+<arg>adbExecTimeout=${200000}</arg>
+<arg>uiautomator2ServerInstallTimeout=${180000}</arg>
+<arg>uiautomator2ServerLaunchTimeout=${180000}</arg>
+<arg>noReset=true</arg>
+<arg>appium:disableHiddenApiPolicy=${false}</arg>
+<arg>appium:ignoreHiddenApiPolicyError=${true}</arg>
+<arg>appium:skipDeviceInitialization=${true}</arg>
+<arg>appium:skipServerInstallation=${false}</arg>
+<arg>appium:systemPort=${8200}</arg>
+<arg>appium:clearSystemFiles=${true}</arg>
+<arg>appium:ensureWebviewsHavePages=${false}</arg>
+<arg>appium:nativeWebScreenshot=${true}</arg>
+<doc>Opens a new application to the given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.19/guides/caps/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | No     | alias             |</doc>
+<status status="PASS" start="2025-11-04T02:57:22.704315" elapsed="21.607502"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:44.312499" level="INFO">✅ Sessão Appium conectada, aguardando estabilização...</msg>
+<arg>✅ Sessão Appium conectada, aguardando estabilização...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:44.312276" elapsed="0.000306"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-04T02:57:49.313120" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-04T02:57:44.312760" elapsed="5.000512"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For App Stability" owner="stability">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:49.314522" level="INFO">⏳ Aguardando estabilização do app com.wdiodemoapp...</msg>
+<arg>⏳ Aguardando estabilização do app ${package_name}...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:49.314352" elapsed="0.000290"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Page Should Contain Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:49.964494" level="INFO">Current page contains element 'id=android:id/content'.</msg>
+<msg time="2025-11-04T02:57:49.964594" level="INFO">criteria is android:id/content</msg>
+<arg>id=android:id/content</arg>
+<doc>Verifies that the current page contains the element with the ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:49.315115" elapsed="0.649534"/>
+</kw>
+<arg>${timeout}</arg>
+<arg>3s</arg>
+<arg>Page Should Contain Element</arg>
+<arg>id=android:id/content</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2025-11-04T02:57:49.314831" elapsed="0.649896"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:49.965112" level="INFO">✅ Elemento android:id/content encontrado</msg>
+<arg>✅ Elemento android:id/content encontrado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:49.964941" elapsed="0.000238"/>
+</kw>
+<status status="PASS" start="2025-11-04T02:57:49.314725" elapsed="0.650493"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Elemento android:id/content não encontrado, tentando continuar...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-04T02:57:49.965388" elapsed="0.000023"/>
+</kw>
+<status status="NOT RUN" start="2025-11-04T02:57:49.965280" elapsed="0.000164"/>
+</branch>
+<status status="PASS" start="2025-11-04T02:57:49.314694" elapsed="0.650781"/>
+</try>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-11-04T02:57:52.965868" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-11-04T02:57:49.965570" elapsed="3.000482"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:52.966582" level="INFO">✅ App com.wdiodemoapp considerado estabilizado</msg>
+<arg>✅ App ${package_name} considerado estabilizado</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:52.966299" elapsed="0.000347"/>
+</kw>
+<arg>com.wdiodemoapp</arg>
+<arg>15s</arg>
+<doc>Aguarda o aplicativo se estabilizar após o launch</doc>
+<status status="PASS" start="2025-11-04T02:57:49.313828" elapsed="3.652903"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:52.967010" level="INFO">✅ App estabilizado com sucesso</msg>
+<arg>✅ App estabilizado com sucesso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:52.966873" elapsed="0.000192"/>
+</kw>
+<status status="PASS" start="2025-11-04T02:57:49.313447" elapsed="3.653658"/>
+</branch>
+<branch type="EXCEPT" assign="${error}">
+<kw name="Log" owner="BuiltIn">
+<arg>⚠️ Aviso: App pode não estar completamente estável: ${error}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-04T02:57:52.967265" elapsed="0.000021"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>ℹ️ Continuando execução mesmo assim...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-11-04T02:57:52.967384" elapsed="0.000020"/>
+</kw>
+<status status="NOT RUN" start="2025-11-04T02:57:52.967162" elapsed="0.000273"/>
+</branch>
+<status status="PASS" start="2025-11-04T02:57:49.313378" elapsed="3.654087"/>
+</try>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:57:52.967653" level="INFO">✅ Sessão pronta para uso</msg>
+<arg>✅ Sessão pronta para uso</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:57:52.967557" elapsed="0.000142"/>
+</kw>
+<doc>Abre uma sessão Appium no emulador Android (udid=emulator-5554) e inicia o app Demo (MainActivity).
+Pré‑requisitos: Appium server ativo em http://localhost:4723 e dispositivo pronto.
+Efeitos: App aberto e estável para interação; permissões concedidas automaticamente.</doc>
+<status status="PASS" start="2025-11-04T02:57:22.703462" elapsed="30.264294"/>
+</kw>
+<kw name="Limpa os Campos de Login" owner="login">
+<kw name="Clear Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:52.969512" level="INFO">Clear text field 'accessibility_id=input-email'</msg>
+<arg>accessibility_id=${INPUT_EMAIL}</arg>
+<doc>Clears the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:52.968233" elapsed="0.553823"/>
+</kw>
+<kw name="Clear Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:53.523743" level="INFO">Clear text field 'accessibility_id=input-password'</msg>
+<arg>accessibility_id=${INPUT_PASSWORD}</arg>
+<doc>Clears the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:53.522293" elapsed="1.024472"/>
+</kw>
+<doc>Limpa os campos de e-mail e senha no formulário de login (reset do estado da tela).</doc>
+<status status="PASS" start="2025-11-04T02:57:52.967968" elapsed="1.578925"/>
+</kw>
+<kw name="Click Login" owner="home">
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:57:54.548869" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="󰍂"]'.</msg>
+<msg time="2025-11-04T02:58:00.300112" level="INFO">xpath criteria: //android.widget.TextView[@text="󰍂"]</msg>
+<arg>${LOGIN}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:57:54.547549" elapsed="5.752715"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${TEXTO_TELA_LOGIN}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-04T02:58:00.300565" elapsed="3.029047"/>
+</kw>
+<doc>Abre a tela de Login a partir da Home e valida o carregamento do formulário.</doc>
+<status status="PASS" start="2025-11-04T02:57:54.547205" elapsed="8.782599"/>
+</kw>
+<kw name="Realizar Login com sucesso" owner="login">
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:58:03.331850" level="INFO">Typing text 'teste@gmail.com' into text field 'accessibility_id=input-email'</msg>
+<arg>accessibility_id=${INPUT_EMAIL}</arg>
+<arg>teste@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:58:03.330493" elapsed="0.686949"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-11-04T02:58:04.019170" level="INFO">Typing text 'Senha@123456' into text field 'accessibility_id=input-password'</msg>
+<arg>accessibility_id=${INPUT_PASSWORD}</arg>
+<arg>Senha@123456</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:58:04.017687" elapsed="1.419599"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:58:05.440035" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="button-LOGIN"]/android.view.ViewGroup'.</msg>
+<msg time="2025-11-04T02:58:06.938210" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="button-LOGIN"]/android.view.ViewGroup</msg>
+<arg>xpath=${BTN_LOGIN}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:58:05.437620" elapsed="1.500741"/>
+</kw>
+<kw name="Wait Until Page Contains" owner="AppiumLibrary">
+<arg>${Mensagem_Sucesso_Login}</arg>
+<arg>timeout=120s</arg>
+<doc>Waits until the ``text`` appears on the current page.</doc>
+<status status="PASS" start="2025-11-04T02:58:06.938664" elapsed="5.735756"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-11-04T02:58:12.677163" level="INFO">Clicking element 'ID=android:id/button1'.</msg>
+<msg time="2025-11-04T02:58:13.131049" level="INFO">criteria is android:id/button1</msg>
+<arg>ID=${BTN_OK_SUCCESS}</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-11-04T02:58:12.674757" elapsed="0.456504"/>
+</kw>
+<doc>Realiza login com credenciais válidas e valida o sucesso ("Success").
+Passos: preenche e-mail e senha, clica em LOGIN, aguarda confirmação e fecha o diálogo.
+Observação: usa valores estáticos de exemplo; ajuste se necessário.</doc>
+<status status="PASS" start="2025-11-04T02:58:03.330141" elapsed="9.801266"/>
+</kw>
+<kw name="Finish session" owner="base" type="TEARDOWN">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-11-04T02:58:13.132535" level="INFO">🔚 Finalizando sessão...</msg>
+<arg>🔚 Finalizando sessão...</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-11-04T02:58:13.132361" elapsed="0.000244"/>
+</kw>
+<kw name="Close Application" owner="AppiumLibrary">
+<doc>Closes the current application and the webdriver session.</doc>
+<status status="PASS" start="2025-11-04T02:58:13.132754" elapsed="3.017205"/>
+</kw>
+<doc>Encerra a sessão Appium caso esteja aberta e finaliza a execução do app.</doc>
+<status status="PASS" start="2025-11-04T02:58:13.131864" elapsed="3.018285"/>
+</kw>
+<doc>Verifica se o usuário consegue realizar o login com sucesso na aplicação</doc>
+<status status="PASS" start="2025-11-04T02:57:22.702690" elapsed="53.447551"/>
+</test>
+<status status="PASS" start="2025-11-04T02:56:05.794442" elapsed="130.356592"/>
+</suite>
+<status status="PASS" start="2025-11-04T02:56:05.773949" elapsed="130.377936"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Tests" id="s1" pass="2" fail="0" skip="0">Tests</stat>
+<stat name="Login" id="s1-s1" pass="2" fail="0" skip="0">Tests.Login</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
